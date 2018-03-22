@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChickenSoup", "ChickenSoup\ChickenSoup.csproj", "{FAAF862E-6129-48EF-BDDB-6CB93A72045C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChickenSoup", "ChickenSoup.csproj", "{FAAF862E-6129-48EF-BDDB-6CB93A72045C}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "JSON", "..\Libraries\JSON\JSON\JSON.shproj", "{634FF80A-FC17-49A4-BD62-DA263243AAF1}"
 EndProject
