@@ -1,0 +1,25 @@
+# Socket / TCP stuff
+PORT                 = 8080
+ROOT_FOLDER          = /Users/Luc/Sites/www
+
+# HTTP stuff
+# Cache is always 0 when the status code is not 4xx
+CACHE_MAX_AGE = 0
+
+# Files in general related stuff
+BASE_FILE            = base/base.html
+DEFAULT_FILE         = index.html
+ERROR_FILE           = base/error.html
+
+# Article related stuff
+ARTICLE_URLS               = blog, projects, tools
+ARTICLE_ROOT_FOLDER        = /Users/Luc/Sites/articles
+SUMMARY_COUNT              = 5
+COMMENT_MIN_NAME_LENGTH    = 3
+COMMENT_MIN_COMMENT_LENGTH = 5
+
+# Redirect related stuff
+REDIRECT_URLS_FILE = ../../redirects.json
+
+# SSL stuff
+# CERTIFICATE_PATH = /Users/Luc/Desktop/certs/fullcert.pfx

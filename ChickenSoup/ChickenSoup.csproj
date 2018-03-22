@@ -1,0 +1,81 @@
+﻿<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{FAAF862E-6129-48EF-BDDB-6CB93A72045C}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ChickenSoup</RootNamespace>
+    <AssemblyName>ChickenSoup</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <ReleaseVersion>0.4</ReleaseVersion>
+    <SynchReleaseVersion>false</SynchReleaseVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ExternalConsole>true</ExternalConsole>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ExternalConsole>true</ExternalConsole>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChickenSoup.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Http.cs" />
+    <Compile Include="ChickenSoup.Console.cs" />
+    <Compile Include="Redirect.cs" />
+    <None Include="config.txt" />
+    <None Include="redirects.json" />
+    <Compile Include="Redirect.Console.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Articles\Articles.cs" />
+    <Compile Include="Articles\Articles.Client.cs" />
+    <Compile Include="Articles\Articles.Comments.cs" />
+    <Compile Include="Articles\Articles.Console.cs" />
+    <Compile Include="Config.Console.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Articles\" />
+    <Folder Include="Articles\Comments\" />
+  </ItemGroup>
+  <Import Project="..\..\Libraries\Configuration\Configuration.projitems" Label="Shared" Condition="Exists('..\..\Libraries\Configuration\Configuration.projitems')" />
+  <Import Project="..\..\Libraries\JSON\JSON\JSON.projitems" Label="Shared" Condition="Exists('..\..\Libraries\JSON\JSON\JSON.projitems')" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <DotNetNamingPolicy ResourceNamePolicy="FileFormatDefault" DirectoryNamespaceAssociation="PrefixedHierarchical" />
+          <TextStylePolicy inheritsSet="null" scope="text/x-csharp" />
+          <CSharpFormattingPolicy IndentBlock="True" IndentBraces="False" IndentSwitchSection="True" IndentSwitchCaseSection="True" LabelPositioning="OneLess" NewLinesForBracesInTypes="True" NewLinesForBracesInMethods="True" NewLinesForBracesInProperties="True" NewLinesForBracesInAccessors="True" NewLinesForBracesInAnonymousMethods="True" NewLinesForBracesInControlBlocks="True" NewLinesForBracesInAnonymousTypes="True" NewLinesForBracesInObjectCollectionArrayInitializers="True" NewLinesForBracesInLambdaExpressionBody="True" NewLineForElse="True" NewLineForCatch="True" NewLineForFinally="True" NewLineForMembersInObjectInit="True" NewLineForMembersInAnonymousTypes="True" NewLineForClausesInQuery="True" SpacingAfterMethodDeclarationName="False" SpaceWithinMethodDeclarationParenthesis="False" SpaceBetweenEmptyMethodDeclarationParentheses="False" SpaceAfterMethodCallName="False" SpaceWithinMethodCallParentheses="False" SpaceBetweenEmptyMethodCallParentheses="False" SpaceAfterControlFlowStatementKeyword="True" SpaceWithinExpressionParentheses="False" SpaceWithinCastParentheses="False" SpaceWithinOtherParentheses="False" SpaceAfterCast="False" SpacesIgnoreAroundVariableDeclaration="False" SpaceBeforeOpenSquareBracket="False" SpaceBetweenEmptySquareBrackets="False" SpaceWithinSquareBrackets="False" SpaceAfterColonInBaseTypeDeclaration="True" SpaceAfterComma="True" SpaceAfterDot="False" SpaceAfterSemicolonsInForStatement="True" SpaceBeforeColonInBaseTypeDeclaration="True" SpaceBeforeComma="False" SpaceBeforeDot="False" SpaceBeforeSemicolonsInForStatement="False" SpacingAroundBinaryOperator="Single" WrappingPreserveSingleLine="True" WrappingKeepStatementsOnSingleLine="True" PlaceSystemDirectiveFirst="True" scope="text/x-csharp" />
+          <TextStylePolicy TabWidth="4" TabsToSpaces="False" IndentWidth="4" RemoveTrailingWhitespace="True" EolMarker="Native" FileWidth="80" NoTabsAfterNonTabs="True" scope="text/plain" />
+          <TextStylePolicy inheritsSet="null" scope="text/x-html" />
+          <HTMLFormattingPolicy FormatOnPaste="True" XHTMLCodingStyle="True" scope="text/x-html" />
+          <TextStylePolicy inheritsSet="null" scope="text/x-web" />
+          <TextStylePolicy inheritsSet="null" scope="text/x-vs" />
+          <TextStylePolicy inheritsSet="null" scope="application/javascript" />
+          <TextStylePolicy inheritsSet="null" scope="text/x-css" />
+          <CSSFormattingPolicy FormatOnPaste="False" AutomaticFormatting="True" BracePositions="SemiExpanded" HierarchicalIndentation="True" scope="text/x-css" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+</Project>
