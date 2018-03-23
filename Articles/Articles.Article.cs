@@ -42,18 +42,15 @@ namespace ChickenSoup
 
 			public Comment[] GetComments()
 			{
-				var path = articleRootFolder + Name + "-comments";
+				var path = articleRootFolder + Category + '/' + Name + "-comments";
 				if (!File.Exists(path))
 					return new Comment[0];
 				byte[] data = File.ReadAllBytes(path);
-				int count = 0;
+				var comments = new List<Comment>();
 				int index = 0;
-				for (int i = 0; i < 4; i++)
-					count += (data[index++] << (i * 8));
-				var comments = new Comment[count];
-				for (int i = 0; i < count; i++)
-					comments[i] = new Comment(data, ref index);
-				return comments;
+				while (index != data.Length)
+					comments.Add(new Comment(data, ref index));
+				return comments.ToArray();
 			}
 
 			public bool AddComment()

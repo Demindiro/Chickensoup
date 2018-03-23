@@ -60,6 +60,7 @@ namespace ChickenSoup
 		public static void WriteAndClose(this HttpListenerContext client, byte[] data, string fileExt, HttpStatusCode code)
 		{
 			client.Response.StatusCode = (int)code;
+			client.Response.Headers["Server"] = "ChickenSoup/" + Configuration.Config.Version;
 			client.Write(data, fileExt);
 			client.Response.Close();
 		}

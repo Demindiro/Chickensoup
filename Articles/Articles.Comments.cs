@@ -26,13 +26,19 @@ namespace ChickenSoup
 			var param = query.Split('&');
 			foreach(var p in param)
 			{
-				var segments = p.Split('=');
+				var segments = p.Split(new[] { '=' }, 2);
+				if (segments.Length < 2)
+				{
+					client.Error(HttpStatusCode.BadRequest);
+					return;
+				}
+				var value = Uri.UnescapeDataString(segments[1]).Replace('+', ' ');
 				if (segments[0] == "name")
-					name = Uri.UnescapeDataString(segments[1]);
+					name = value;
 				else if (segments[0] == "email")
-					email = Uri.UnescapeDataString(segments[1]);
+					email = value;
 				else if (segments[0] == "comment")
-					text = Uri.UnescapeDataString(segments[1]);
+					text = value;
 				else if (segments[0] == "replyTo")
 					replyTo = int.Parse(segments[1]);
 			}
@@ -48,7 +54,7 @@ namespace ChickenSoup
 
 			using (var file = File.Open(pathComments, FileMode.Append))
 				comment.Serialize(file);
-			client.Close(HttpStatusCode.Created);
+			client.Close(HttpStatusCode.ResetContent);
 
 			return;
 			error:

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -8,19 +9,51 @@ namespace ChickenSoup
 	using Configuration;
 	public static partial class Articles
 	{
-		private delegate string GetEntry(Article article);
+		private class CommentTree
+		{
+			public Comment comment;
+			public int id;
+			public List<CommentTree> branches = new List<CommentTree>();
+
+			public CommentTree()
+			{ }
+			public CommentTree(Comment comment)
+			{
+				this.comment = comment;
+			}
+
+			public bool Add(Comment comment)
+			{
+				if (comment.replyTo == id)
+				{
+					Add(new CommentTree(comment));
+					return true;
+				}
+				int count = branches.Count;
+				for (int i = 0; i < count; i++)
+				{
+					if (branches[i].Add(comment))
+						return true;
+				}
+				return false;
+			}
+			public void Add(CommentTree tree) => branches.Add(tree);
+		}
 
 		private static string articleTemplate;
 		private static string summarySnippet;
+		private static string commentSnippet;
 
 		#pragma warning disable 0649
 		[Config("ARTICLE_TEMPLATE")]private static readonly string ArticleTemplatePath;
 		[Config("SUMMARY_SNIPPET")] private static readonly string SummarySnippetPath;
+		[Config("COMMENT_SNIPPET")] private static readonly string CommentSnippetPath;
 		[Config("SUMMARY_COUNT")]   private static int summaryCount;
 		#pragma warning restore 0649
 
 		private static string ArticleTemplate => articleTemplate ?? (articleTemplate = File.ReadAllText(ChickenSoup.RootFolder + ArticleTemplatePath));
 		private static string SummarySnippet  => summarySnippet  ?? (summarySnippet  = File.ReadAllText(ChickenSoup.RootFolder + SummarySnippetPath));
+		private static string CommentSnippet  => commentSnippet  ?? (commentSnippet  = File.ReadAllText(ChickenSoup.RootFolder + CommentSnippetPath));
 
 		private static void GetArticle(this HttpListenerContext client, int categoryIndex)
 		{
@@ -49,13 +82,10 @@ namespace ChickenSoup
 			var path = req.Url.AbsolutePath;
 			Article art = lastArticles[categoryIndex];
 
-			GetEntry getEntry;
-			getEntry = GetSummaryEntryAsHtml;
-			
 			var sb = new StringBuilder();
 			for (var i = 0; i < summaryCount && art != null; i++)
 			{
-				sb.Append(getEntry(art));
+				sb.Append(GetSummaryEntry(art));
 				art = art.Previous;
 			}
 
@@ -79,8 +109,7 @@ namespace ChickenSoup
 			}
 			else if (r.HttpMethod == "POST")
 			{
-				if (segments.Length <= 2)
-					client.AddComment(categoryIndex);
+				client.AddComment(categoryIndex);
 			}
 			else
 			{
@@ -89,7 +118,7 @@ namespace ChickenSoup
 		}
 
 
-		private static string GetSummaryEntryAsHtml(Article art)
+		private static string GetSummaryEntry(Article art)
 		{
 			var sum = GetSummaryText(art);
 			return SummarySnippet.Replace("{href}", art.Category + '/' + art.Name)
@@ -110,6 +139,7 @@ namespace ChickenSoup
 			return sum.Substring(hb, he - hb);
 		}
 
+
 		private static void GetArticleAsHtml(this HttpListenerContext client, Article article)
 		{
 			var path = ChickenSoup.RootFolder + article.Path;
@@ -117,14 +147,17 @@ namespace ChickenSoup
 			{
 				var content = File.ReadAllText(path);
 				var comments = article.GetComments();
-				var commentsHtml = "";
+				var tree = new CommentTree();
+				tree.id = -1;
+				foreach (var comment in comments)
+					if (!tree.Add(comment))
+						throw new FormatException($"Comment file of {article.Name} has an invalid comment: {comment}");
 				client.WriteAndClose(ArticleTemplate.Replace("{title}", article.Title)
 				                                    .Replace("{time}", article.Date.ToString())
 				                                    .Replace("{time(O)}", article.Date.ToString("O"))
 				                                    .Replace("{content}", File.ReadAllText(path))
-				                                    .Replace("{comments}", commentsHtml),
+				                                    .Replace("{comments}", GenerateCommentHtml(tree)),
 				                     "html", HttpStatusCode.OK);
-				return;
 			}
 			else
 			{
@@ -132,5 +165,20 @@ namespace ChickenSoup
 			}
 		}
 
+
+		private static string GenerateCommentHtml(CommentTree tree)
+		{
+			var sb = new StringBuilder();
+			foreach (var branch in tree.branches)
+			{
+				sb.Append(CommentSnippet
+				          .Replace("{time}", branch.comment.date.ToString())
+				          .Replace("{time(O)}", branch.comment.date.ToString("O"))
+				          .Replace("{user}", branch.comment.name)
+				          .Replace("{comment}", branch.comment.comment)
+				          .Replace("{reply}", GenerateCommentHtml(branch)));
+			}
+			return sb.ToString();
+		}
 	}
 }

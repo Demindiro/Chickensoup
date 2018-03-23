@@ -1,5 +1,0 @@
-/Users/Luc/Projects/C#/ChickenSoup/ChickenSoup/bin/Debug/ChickenSoup.exe
-/Users/Luc/Projects/C#/ChickenSoup/ChickenSoup/bin/Debug/ChickenSoup.pdb
-/Users/Luc/Projects/C#/ChickenSoup/ChickenSoup/obj/x86/Debug/ChickenSoup.csproj.CoreCompileInputs.cache
-/Users/Luc/Projects/C#/ChickenSoup/ChickenSoup/obj/x86/Debug/ChickenSoup.exe
-/Users/Luc/Projects/C#/ChickenSoup/ChickenSoup/obj/x86/Debug/ChickenSoup.pdb

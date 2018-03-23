@@ -35,7 +35,7 @@ namespace ChickenSoup
 			{
 				long ticks = 0;
 				for (int i = 0; i < 8; i++)
-					ticks += (data[index++] << (i * 8));
+					ticks += ((long)data[index++] << (i * 8));
 				date = new DateTime(ticks);
 				int len = data[index++];
 				name = UTF8.GetString(data, index, len);
@@ -45,8 +45,9 @@ namespace ChickenSoup
 					replyTo += (data[index++] << (i * 8));
 				len = 0;
 				for (int i = 0; i < 2; i++)
-					replyTo += (data[index++] << (i * 8));
+					len += (data[index++] << (i * 8));
 				comment = UTF8.GetString(data, index, len);
+				index += len;
 			}
 
 			public override string ToString()
@@ -60,10 +61,10 @@ namespace ChickenSoup
 				for (int i = 0; i < 8; i++)
 					stream.WriteByte ((byte)(ticks >> (i * 8)));
 				var array = UTF8.GetBytes(name);
+				stream.WriteByte((byte)array.Length);
 				stream.Write(array, 0, array.Length);
-				replyTo = 0;
 				for (int i = 0; i < 4; i++)
-					stream.WriteByte ((byte)(replyTo >> (i * 8)));
+					stream.WriteByte ((byte)((uint)replyTo >> (i * 8)));
 				array = UTF8.GetBytes(comment);
 				for (int i = 0; i < 2; i++)
 					stream.WriteByte((byte)(array.Length >> (i * 8)));

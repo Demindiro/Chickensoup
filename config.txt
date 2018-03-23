@@ -15,6 +15,7 @@ ERROR_FILE           = base/error.html
 ARTICLE_URLS               = blog, projects, tools
 ARTICLE_ROOT_FOLDER        = /Users/Luc/Sites/articles
 SUMMARY_SNIPPET            = base/article/summarySnippet.html
+COMMENT_SNIPPET            = base/article/commentSnippet.html
 ARTICLE_TEMPLATE           = base/article/article.html
 SUMMARY_COUNT              = 5
 COMMENT_MIN_NAME_LENGTH    = 3

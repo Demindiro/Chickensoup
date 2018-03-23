@@ -2,11 +2,9 @@
   <MonoDevelop.Ide.ItemProperties.ChickenSoup PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="ChickenSoup Status">
     <Files>
-      <File FileName="Articles/Articles.Article.cs" Line="46" Column="28" />
-      <File FileName="Articles/Articles.cs" Line="1" Column="1" />
-      <File FileName="Articles/Articles.Comments.cs" Line="70" Column="80" />
-      <File FileName="Articles/Articles.Comment.cs" Line="70" Column="42" />
-      <File FileName="Articles/Articles.Client.cs" Line="125" Column="60" />
+      <File FileName="Articles/Articles.Comments.cs" Line="33" Column="13" />
+      <File FileName="Articles/Articles.Client.cs" Line="149" Column="1" />
+      <File FileName="Articles/Articles.Comment.cs" Line="49" Column="1" />
       <File FileName="ChickenSoup Status" />
     </Files>
   </MonoDevelop.Ide.Workbench>
