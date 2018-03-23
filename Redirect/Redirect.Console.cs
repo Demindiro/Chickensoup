@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using JSON;
 
 namespace ChickenSoup
 {
@@ -37,15 +36,15 @@ namespace ChickenSoup
 					return;
 			}
 			Urls[uri] = location;
-			File.WriteAllText(urlFile, Json.Stringify(Urls.Convert()));
+			File.AppendAllText(urlFile, uri + ':' + location);
 		}
 
 		private static void Remove(string uri)
 		{
+			throw new NotImplementedException();
 			if(!Urls.ContainsKey(uri))
 				throw new ArgumentException($"URI \"{uri}\" is not defined");
 			Urls.Remove(uri);
-			File.WriteAllText(urlFile, Json.Stringify(Urls.Convert()));
 		}
 
 		private static Dictionary<string, object> Convert(this Dictionary<string, string> dict)

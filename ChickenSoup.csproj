@@ -37,10 +37,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Http.cs" />
     <Compile Include="ChickenSoup.Console.cs" />
-    <Compile Include="Redirect.cs" />
     <None Include="config.txt" />
-    <None Include="redirects.json" />
-    <Compile Include="Redirect.Console.cs" />
+    <None Include="redirects" />
     <Compile Include="Logger.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Articles\Articles.cs" />
@@ -48,6 +46,10 @@
     <Compile Include="Articles\Articles.Comments.cs" />
     <Compile Include="Articles\Articles.Console.cs" />
     <Compile Include="Config.Console.cs" />
+    <Compile Include="Redirect\Redirect.cs" />
+    <Compile Include="Redirect\Redirect.Console.cs" />
+    <Compile Include="Articles\Articles.Article.cs" />
+    <Compile Include="Articles\Articles.Comment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.txt" />
@@ -55,9 +57,9 @@
   <ItemGroup>
     <Folder Include="Articles\" />
     <Folder Include="Articles\Comments\" />
+    <Folder Include="Redirect\" />
   </ItemGroup>
-  <Import Project="..\..\Libraries\Configuration\Configuration.projitems" Label="Shared" Condition="Exists('..\..\Libraries\Configuration\Configuration.projitems')" />
-  <Import Project="..\..\Libraries\JSON\JSON\JSON.projitems" Label="Shared" Condition="Exists('..\..\Libraries\JSON\JSON\JSON.projitems')" />
+  <Import Project="..\Libraries\Configuration\Configuration.projitems" Label="Shared" Condition="Exists('..\Libraries\Configuration\Configuration.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <MonoDevelop>

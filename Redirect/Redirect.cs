@@ -13,15 +13,23 @@ namespace ChickenSoup
 		#pragma warning restore 0649
 		private static HttpListener server;
 
-		public static Dictionary<string, string> Urls { get; private set; }
-
+		public static readonly Dictionary<string, string> Urls = new Dictionary<string, string>();
 
 		public static void Init()
 		{
 			if(File.Exists(urlFile))
-				Urls = JSON.Json.Parse(File.ReadAllText(urlFile)).Convert();
+			{
+				var lines = File.ReadAllLines(urlFile);	
+				foreach (var line in lines)
+				{
+					int colonIndex = line.IndexOf(':');
+					Urls.Add(line.Substring(0, colonIndex), line.Substring(colonIndex + 1));
+				}
+			}
 			else
-				File.WriteAllText(urlFile, "{}");
+			{
+				File.Create(urlFile).Close();
+			}
 			server = new HttpListener();
 			server.Prefixes.Add($"http://*:{ChickenSoup.Port}/rdr/");
 			server.Start();
@@ -47,14 +55,6 @@ namespace ChickenSoup
 			client.SetHeader("Location", Urls[key]);
 			client.Response.StatusCode = (int)HttpStatusCode.Found;
 			client.Response.Close();
-		}
-
-		private static Dictionary<string, string> Convert(this Dictionary<string, object> dict)
-		{
-			var convDict = new Dictionary<string, string>(dict.Count);
-			foreach(var item in dict)
-				convDict[item.Key] = (string)item.Value;
-			return convDict;
 		}
 	}
 }

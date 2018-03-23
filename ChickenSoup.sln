@@ -27,5 +27,11 @@ Global
 		$2.BracePositions = SemiExpanded
 		$2.HierarchicalIndentation = True
 		$2.scope = text/x-css
+		$0.VersionControlPolicy = $3
+		$3.CommitMessageStyle = $4
+		$4.FirstFilePrefix = 
+		$4.FileSeparator = ", "
+		$4.LastFilePostfix = @:\n
+		$4.LineAlign = 0
 	EndGlobalSection
 EndGlobal

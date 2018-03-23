@@ -33,7 +33,15 @@ namespace ChickenSoup
 			if (ret <= 0)
 				return -ret;
 
-			Configuration.Config.ReadConfigFile();
+			try
+			{
+				Configuration.Config.ReadConfigFile();
+			}
+			catch (Exception ex)
+			{
+				Console.Error.WriteLine(ex.Message);
+				return 1;
+			}
 			if (!rootFolder.EndsWith("/", StringComparison.InvariantCulture))
 				rootFolder += "/";
 

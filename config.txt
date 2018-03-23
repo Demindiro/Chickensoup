@@ -3,7 +3,7 @@ PORT                 = 8080
 ROOT_FOLDER          = /Users/Luc/Sites/www
 
 # HTTP stuff
-# Cache is always 0 when the status code is not 4xx
+# Cache is always 0 when the status code is 4xx or 5xx
 CACHE_MAX_AGE = 0
 
 # Files in general related stuff
@@ -14,6 +14,8 @@ ERROR_FILE           = base/error.html
 # Article related stuff
 ARTICLE_URLS               = blog, projects, tools
 ARTICLE_ROOT_FOLDER        = /Users/Luc/Sites/articles
+SUMMARY_SNIPPET            = base/article/summarySnippet.html
+ARTICLE_TEMPLATE           = base/article/article.html
 SUMMARY_COUNT              = 5
 COMMENT_MIN_NAME_LENGTH    = 3
 COMMENT_MIN_COMMENT_LENGTH = 5

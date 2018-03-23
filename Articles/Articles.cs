@@ -9,41 +9,6 @@ namespace ChickenSoup
 	using Configuration;
 	public static partial class Articles
 	{
-		private class Article
-		{
-			public readonly string Name;
-			public readonly string Title;
-			public readonly string Category;
-			public readonly string Path;
-			public readonly DateTime Date;
-			public readonly Article Next;
-			public readonly Article Previous;
-
-			public Article(string name, string title, string category, string path,
-			                 DateTime date, Article next = null, Article previous = null)
-			{
-				Name     = name;
-				Title    = title;
-				Category = category;
-				Path     = path;
-				Date     = date;
-				Next     = next;
-				Previous = previous;
-			}
-
-			public Article(string data, string category)
-			{
-				var f = data.Split(';');
-				if(f.Length != 4)
-					throw new ArgumentException("Data string is malformed", nameof(data));
-				Name     = f[0];
-				Title    = f[1];
-				Path     = f[2];
-				Date     = DateTime.Parse(f[3]);
-				Category = category;
-			}
-		}
-
 		#pragma warning disable 0649
 		[Config("ARTICLE_ROOT_FOLDER")] private static string articleRootFolder;
 		[Config("ARTICLE_URLS")] private static string[] categories;

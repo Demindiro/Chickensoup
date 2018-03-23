@@ -10,14 +10,17 @@ namespace ChickenSoup
 	{
 		private delegate string GetEntry(Article article);
 
+		private static string articleTemplate;
 		private static string summarySnippet;
 
 		#pragma warning disable 0649
-		//[Config("SUMMARY_SNIPPET")] private static readonly string SummarySnippetPath;
-		[Config("SUMMARY_COUNT")] private static int summaryCount;
+		[Config("ARTICLE_TEMPLATE")]private static readonly string ArticleTemplatePath;
+		[Config("SUMMARY_SNIPPET")] private static readonly string SummarySnippetPath;
+		[Config("SUMMARY_COUNT")]   private static int summaryCount;
 		#pragma warning restore 0649
 
-		//private static string SummarySnippet = summarySnippet ?? (summarySnippet = File.ReadAllText(SummarySnippetPath));
+		private static string ArticleTemplate => articleTemplate ?? (articleTemplate = File.ReadAllText(ChickenSoup.RootFolder + ArticleTemplatePath));
+		private static string SummarySnippet  => summarySnippet  ?? (summarySnippet  = File.ReadAllText(ChickenSoup.RootFolder + SummarySnippetPath));
 
 		private static void GetArticle(this HttpListenerContext client, int categoryIndex)
 		{
@@ -86,25 +89,13 @@ namespace ChickenSoup
 		}
 
 
-		private static string GetSummaryEntryAsJson(Article art)
-		{
-			var sum = GetSummaryText(art);
-			return "{" +
-			       $"\"link\":\"{art.Category}/{art.Name}\"," + 
-			       $"\"date\":\"{art.Date.ToString("O")}\"," +
-			       $"\"title\":\"{art.Title}\"," +
-			       $"\"summary\":\"{sum.Replace("\n","\\n").Replace("\t","\\t")}\"" +
-			       "},";
-		}
-
-
 		private static string GetSummaryEntryAsHtml(Article art)
 		{
 			var sum = GetSummaryText(art);
-			return $"<a href=\"/{art.Category}/{art.Name}?format=html\">" +
-			       $"<time datetime=\"{art.Date.ToString("O")}\">{art.Date.ToString("yy-MM-dd hh:mm:ss")}</time>" +
-			       $"<article>{sum}</article>" +
-			       $"</a>";
+			return SummarySnippet.Replace("{href}", art.Category + '/' + art.Name)
+				                 .Replace("{time}", art.Date.ToString())
+				                 .Replace("{time(O)}", art.Date.ToString("O"))
+			                     .Replace("{content}", sum);
 		}
 
 
@@ -119,28 +110,21 @@ namespace ChickenSoup
 			return sum.Substring(hb, he - hb);
 		}
 
-
-		private static void GetArticleAsJson(this HttpListenerContext client, Article art)
+		private static void GetArticleAsHtml(this HttpListenerContext client, Article article)
 		{
-			client.Write($"\"link\":\"{art.Path}\"" +
-			             $",\"title\":\"{art.Title}\"" +
-			             $",\"date\":\"{art.Date.ToString("O")}\"" +
-			             (art.Previous == null ? "" : $",\"previous\":\"{art.Previous.Name}\"") +
-			             (art.Next     == null ? "" : $",\"next\":\"{    art.Next.Name}\"") +
-						 "}", "json");
-		}
-
-
-		private static void GetArticleAsHtml(this HttpListenerContext client, Article art)
-		{
-			var path = ChickenSoup.RootFolder + art.Path;
+			var path = ChickenSoup.RootFolder + article.Path;
 			if (File.Exists(path))
 			{
-				client.WriteAndClose($"<title>{art.Title}</title>" +
-				             (art.Previous == null ? "" : $"<a href=\"{art.Previous.Name}?format=html\">Previous</a>") +
-				             (art.Next     == null ? "" : $"<a href=\"{art.Next    .Name}?format=html\">Next</a>") +
-				             $"<time datetime=\"{art.Date.ToString("O")}\">{art.Date.ToString("yy-MM-dd hh:mm:ss")}</time>" +
-				             $"<article>{File.ReadAllText(path)}</article>", "html", HttpStatusCode.OK);
+				var content = File.ReadAllText(path);
+				var comments = article.GetComments();
+				var commentsHtml = "";
+				client.WriteAndClose(ArticleTemplate.Replace("{title}", article.Title)
+				                                    .Replace("{time}", article.Date.ToString())
+				                                    .Replace("{time(O)}", article.Date.ToString("O"))
+				                                    .Replace("{content}", File.ReadAllText(path))
+				                                    .Replace("{comments}", commentsHtml),
+				                     "html", HttpStatusCode.OK);
+				return;
 			}
 			else
 			{
