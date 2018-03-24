@@ -7,16 +7,16 @@ ROOT_FOLDER          = /Users/Luc/Sites/www
 CACHE_MAX_AGE = 0
 
 # Files in general related stuff
-BASE_FILE            = base/base.html
-DEFAULT_FILE         = index.html
-ERROR_FILE           = base/error.html
+BASE_FILE            = /Users/Luc/Sites/www/base/base.html
+DEFAULT_FILE         = /Users/Luc/Sites/www/index.html
+ERROR_FILE           = /Users/Luc/Sites/www/base/error.html
 
 # Article related stuff
 ARTICLE_URLS               = blog, projects, tools
 ARTICLE_ROOT_FOLDER        = /Users/Luc/Sites/articles
-SUMMARY_SNIPPET            = base/article/summarySnippet.html
-COMMENT_SNIPPET            = base/article/commentSnippet.html
-ARTICLE_TEMPLATE           = base/article/article.html
+SUMMARY_SNIPPET            = /Users/Luc/Sites/www/base/article/summarySnippet.html
+COMMENT_SNIPPET            = /Users/Luc/Sites/www/base/article/commentSnippet.html
+ARTICLE_TEMPLATE           = /Users/Luc/Sites/www/base/article/article.html
 SUMMARY_COUNT              = 5
 COMMENT_MIN_NAME_LENGTH    = 3
 COMMENT_MIN_COMMENT_LENGTH = 5

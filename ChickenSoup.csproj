@@ -6,7 +6,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>ChickenSoup</RootNamespace>
     <AssemblyName>ChickenSoup</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <ReleaseVersion>0.4</ReleaseVersion>
     <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>

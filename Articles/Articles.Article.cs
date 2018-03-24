@@ -8,6 +8,7 @@ namespace ChickenSoup
 	{
 		private class Article
 		{
+			private int commentCount = -1;
 			public readonly string Name;
 			public readonly string Title;
 			public readonly string Category;
@@ -15,6 +16,15 @@ namespace ChickenSoup
 			public readonly DateTime Date;
 			public readonly Article Next;
 			public readonly Article Previous;
+			public int CommentCount
+			{
+				get
+				{
+					if (commentCount < 0)
+						return commentCount = GetComments().Length;
+					return commentCount;
+				}
+			}
 
 			public Article(string name, string title, string category, string path,
 							 DateTime date, Article next = null, Article previous = null)
@@ -48,13 +58,17 @@ namespace ChickenSoup
 				byte[] data = File.ReadAllBytes(path);
 				var comments = new List<Comment>();
 				int index = 0;
-				while (index != data.Length)
-					comments.Add(new Comment(data, ref index));
+				for (int i = 0; index != data.Length; i++)
+					comments.Add(new Comment(data, ref index, i));
 				return comments.ToArray();
 			}
 
-			public bool AddComment()
+			public bool AddComment(Comment comment)
 			{
+				var path = articleRootFolder + Category + '/' + Name + "-comments";
+				using (var file = File.Open(path, FileMode.Append))
+					comment.Serialize(file);
+				commentCount++;
 				return false;
 			}
 		}

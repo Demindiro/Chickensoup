@@ -1,17 +1,19 @@
 ﻿<Properties StartupConfiguration="{FAAF862E-6129-48EF-BDDB-6CB93A72045C}|Default" GitUserInfo="UsingMD">
   <MonoDevelop.Ide.ItemProperties.ChickenSoup PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="ChickenSoup Status">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Articles/Articles.Comment.cs">
     <Files>
-      <File FileName="Articles/Articles.Comments.cs" Line="33" Column="13" />
-      <File FileName="Articles/Articles.Client.cs" Line="149" Column="1" />
-      <File FileName="Articles/Articles.Comment.cs" Line="49" Column="1" />
-      <File FileName="ChickenSoup Status" />
+      <File FileName="Articles/Articles.Comments.cs" Line="57" Column="1" />
+      <File FileName="Articles/Articles.Article.cs" Line="70" Column="1" />
+      <File FileName="Articles/Articles.Client.cs" Line="167" Column="60" />
+      <File FileName="Articles/Articles.Comment.cs" Line="64" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.ItemProperties.Configuration FirstBuild="True" />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/Luc/Projects/C#/ChickenSoup/Articles/Articles.Comments.cs" relfile="Articles/Articles.Comments.cs" line="55" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />

@@ -40,20 +40,12 @@ namespace ChickenSoup
 			public void Add(CommentTree tree) => branches.Add(tree);
 		}
 
-		private static string articleTemplate;
-		private static string summarySnippet;
-		private static string commentSnippet;
-
 		#pragma warning disable 0649
-		[Config("ARTICLE_TEMPLATE")]private static readonly string ArticleTemplatePath;
-		[Config("SUMMARY_SNIPPET")] private static readonly string SummarySnippetPath;
-		[Config("COMMENT_SNIPPET")] private static readonly string CommentSnippetPath;
-		[Config("SUMMARY_COUNT")]   private static int summaryCount;
+		[Config("ARTICLE_TEMPLATE", LoadFileContents = true)] private static readonly string ArticleTemplate;
+		[Config("SUMMARY_SNIPPET" , LoadFileContents = true)] private static readonly string SummarySnippet;
+		[Config("COMMENT_SNIPPET" , LoadFileContents = true)] private static readonly string CommentSnippet;
+		[Config("SUMMARY_COUNT")] private static int summaryCount;
 		#pragma warning restore 0649
-
-		private static string ArticleTemplate => articleTemplate ?? (articleTemplate = File.ReadAllText(ChickenSoup.RootFolder + ArticleTemplatePath));
-		private static string SummarySnippet  => summarySnippet  ?? (summarySnippet  = File.ReadAllText(ChickenSoup.RootFolder + SummarySnippetPath));
-		private static string CommentSnippet  => commentSnippet  ?? (commentSnippet  = File.ReadAllText(ChickenSoup.RootFolder + CommentSnippetPath));
 
 		private static void GetArticle(this HttpListenerContext client, int categoryIndex)
 		{
@@ -67,11 +59,29 @@ namespace ChickenSoup
 			if (url[url.Length - 1].Contains("."))
 			{
 				client.GetFile();
+				return;
+			}
+			var article = articles[categoryIndex][url[2]];
+			var path = ChickenSoup.RootFolder + article.Path;
+			if (File.Exists(path))
+			{
+				var content = File.ReadAllText(path);
+				var comments = article.GetComments();
+				var tree = new CommentTree();
+				tree.id = -1;
+				foreach (var comment in comments)
+					if (!tree.Add(comment))
+						throw new FormatException($"Comment file of {article.Name} has an invalid comment: {comment}");
+				var response = ArticleTemplate.Replace("{title}", article.Title)
+				                              .Replace("{time}", article.Date.ToString())
+				                              .Replace("{time(O)}", article.Date.ToString("O"))
+				                              .Replace("{content}", File.ReadAllText(path))
+				                              .Replace("{comments}", GenerateCommentHtml(tree));
+				client.WriteAndClose(response, "html", HttpStatusCode.OK);
 			}
 			else
 			{
-				var key = url[2];
-				client.GetArticleAsHtml(articles[categoryIndex][key]);
+				client.Error(HttpStatusCode.NotFound);
 			}
 		}
 
@@ -140,45 +150,22 @@ namespace ChickenSoup
 		}
 
 
-		private static void GetArticleAsHtml(this HttpListenerContext client, Article article)
-		{
-			var path = ChickenSoup.RootFolder + article.Path;
-			if (File.Exists(path))
-			{
-				var content = File.ReadAllText(path);
-				var comments = article.GetComments();
-				var tree = new CommentTree();
-				tree.id = -1;
-				foreach (var comment in comments)
-					if (!tree.Add(comment))
-						throw new FormatException($"Comment file of {article.Name} has an invalid comment: {comment}");
-				client.WriteAndClose(ArticleTemplate.Replace("{title}", article.Title)
-				                                    .Replace("{time}", article.Date.ToString())
-				                                    .Replace("{time(O)}", article.Date.ToString("O"))
-				                                    .Replace("{content}", File.ReadAllText(path))
-				                                    .Replace("{comments}", GenerateCommentHtml(tree)),
-				                     "html", HttpStatusCode.OK);
-			}
-			else
-			{
-				client.Error(HttpStatusCode.NotFound);
-			}
-		}
-
-
 		private static string GenerateCommentHtml(CommentTree tree)
 		{
 			var sb = new StringBuilder();
-			foreach (var branch in tree.branches)
-			{
-				sb.Append(CommentSnippet
-				          .Replace("{time}", branch.comment.date.ToString())
-				          .Replace("{time(O)}", branch.comment.date.ToString("O"))
-				          .Replace("{user}", branch.comment.name)
-				          .Replace("{comment}", branch.comment.comment)
-				          .Replace("{reply}", GenerateCommentHtml(branch)));
-			}
+			for (int i = tree.branches.Count - 1; i >= 0; i--)
+				sb.Append(GenerateCommentHtml(tree.branches[i].comment, GenerateCommentHtml(tree.branches[i])));
 			return sb.ToString();
+		}
+
+		private static string GenerateCommentHtml(Comment comment, string reply)
+		{
+			return CommentSnippet.Replace("{time}", comment.date.ToString())
+				                 .Replace("{time(O)}", comment.date.ToString("O"))
+				                 .Replace("{user}", comment.name)
+				                 .Replace("{comment}", comment.comment)
+				                 .Replace("{id}", comment.id.ToString())
+				                 .Replace("{reply}", reply);
 		}
 	}
 }

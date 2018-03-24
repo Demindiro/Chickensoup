@@ -9,7 +9,7 @@ namespace ChickenSoup
 	public static partial class Redirect
 	{
 		#pragma warning disable 0649
-		[Config("REDIRECT_URLS_FILE")] internal static string urlFile;
+		[Config("REDIRECT_URLS_FILE")] internal static string urlFilePath;
 		#pragma warning restore 0649
 		private static HttpListener server;
 
@@ -17,18 +17,19 @@ namespace ChickenSoup
 
 		public static void Init()
 		{
-			if(File.Exists(urlFile))
+			if(File.Exists(urlFilePath))
 			{
-				var lines = File.ReadAllLines(urlFile);	
+				var lines = File.ReadAllLines(urlFilePath);	
 				foreach (var line in lines)
 				{
 					int colonIndex = line.IndexOf(':');
-					Urls.Add(line.Substring(0, colonIndex), line.Substring(colonIndex + 1));
+					if (colonIndex >= 0)
+						Urls.Add(line.Substring(0, colonIndex), line.Substring(colonIndex + 1));
 				}
 			}
 			else
 			{
-				File.Create(urlFile).Close();
+				File.Create(urlFilePath).Close();
 			}
 			server = new HttpListener();
 			server.Prefixes.Add($"http://*:{ChickenSoup.Port}/rdr/");

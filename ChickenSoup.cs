@@ -11,20 +11,16 @@ namespace ChickenSoup
 	{
 		// TODO figure out how to disable the warning for all fields with this attribute
 		#pragma warning disable 0649
-		[Config("PORT")]               private static ushort port;
-		[Config("BASE_FILE")]          private static string baseFilePath;
-		[Config("DEFAULT_FILE")]       private static string defaultFilePath;
-		[Config("ERROR_FILE")]         private static string errorSnippetFilePath;
+		[Config("PORT")] private static ushort port;
+		[Config("BASE_FILE"   , LoadFileContents = true)] public static readonly string BaseFile;
+		[Config("DEFAULT_FILE", LoadFileContents = true)] public static readonly string DefaultFile;
+		[Config("ERROR_FILE"  , LoadFileContents = true)] public static readonly string ErrorSnippet;
 		#pragma warning restore 0649
-		[Config("ROOT_FOLDER")]        private static string rootFolder;
-		[Config("CACHE_MAX_AGE")]      public static readonly int CacheMaxAge;
-		private static string errorSnippet;
-		private static string baseFile;
+		[Config("ROOT_FOLDER")]   private static string rootFolder;
+		[Config("CACHE_MAX_AGE")] public static readonly int CacheMaxAge;
 		private static HttpListener server;
 
-		public static string BaseFile => baseFile ?? (baseFile = File.ReadAllText(RootFolder + baseFilePath));
-		public static string ErrorSnippet => errorSnippet ?? (errorSnippet = File.ReadAllText(RootFolder + errorSnippetFilePath));
-		public static ushort Port => port;
+		public static ushort Port       => port;
 		public static string RootFolder => rootFolder;
 
 		public static int Main(string[] args)

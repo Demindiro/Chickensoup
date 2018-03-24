@@ -36,15 +36,19 @@ namespace ChickenSoup
 					return;
 			}
 			Urls[uri] = location;
-			File.AppendAllText(urlFile, uri + ':' + location);
+			File.AppendAllText(urlFilePath, uri + ':' + location);
 		}
 
 		private static void Remove(string uri)
 		{
-			throw new NotImplementedException();
 			if(!Urls.ContainsKey(uri))
-				throw new ArgumentException($"URI \"{uri}\" is not defined");
+				throw new ArgumentException($"URI \"{uri}\" is not defined", nameof(uri));
 			Urls.Remove(uri);
+			var urls = new string[Urls.Count];
+			int i = 0;
+			foreach (var item in Urls)
+				urls[i++] = item.Key + ':' + item.Value;
+			File.WriteAllLines(urlFilePath, urls);
 		}
 
 		private static Dictionary<string, object> Convert(this Dictionary<string, string> dict)

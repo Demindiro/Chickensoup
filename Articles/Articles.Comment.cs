@@ -12,8 +12,9 @@ namespace ChickenSoup
 			public string comment;
 			public DateTime date;
 			public int replyTo;
+			public int id;
 
-			public Comment(string name, string comment, int replyTo, DateTime date)
+			public Comment(string name, string comment, int replyTo, DateTime date, int id)
 			{
 				this.name = name;
 				this.date = date;
@@ -21,17 +22,18 @@ namespace ChickenSoup
 					.Replace("<", "&lt;")
 					.Replace(">", "&rt;");
 				this.replyTo = replyTo;
+				this.id = id;
 			}
 
-			public Comment(string name, string comment, int replyTo) :
-			this(name, comment, replyTo, DateTime.Now)
+			public Comment(string name, string comment, int id, int replyTo) :
+			this(name, comment, replyTo, DateTime.Now, id)
 			{ }
 
-			public Comment(string name, string comment) :
-			this(name, comment, -1)
+			public Comment(string name, string comment, int id) :
+			this(name, comment, -1, id)
 			{ }
 
-			internal Comment(byte[] data, ref int index)
+			internal Comment(byte[] data, ref int index, int id)
 			{
 				long ticks = 0;
 				for (int i = 0; i < 8; i++)
@@ -48,6 +50,7 @@ namespace ChickenSoup
 					len += (data[index++] << (i * 8));
 				comment = UTF8.GetString(data, index, len);
 				index += len;
+				this.id = id;
 			}
 
 			public override string ToString()

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -17,7 +16,6 @@ namespace ChickenSoup
 		private static void AddComment(this HttpListenerContext client, int categoryIndex)
 		{
 			var r = client.Request;
-			var pathComments       = articleRootFolder + r.Url.AbsolutePath + "-comments";
 
 			string name = null, email = null, text = null;
 			int replyTo = -1;
@@ -48,23 +46,32 @@ namespace ChickenSoup
 				return;
 			}
 			
-			var comment = new Comment(name, text, replyTo);
-			if (!ValidateComment(comment))
-				goto error;
+			var article = articles[categoryIndex][r.Url.Segments[2]];
+			var comment = new Comment(name, text, article.CommentCount, replyTo);
+			if (!comment.Validate(article))
+			{
+				client.Error(HttpStatusCode.BadRequest);
+				return;
+			}
+			article.AddComment(comment);
 
-			using (var file = File.Open(pathComments, FileMode.Append))
-				comment.Serialize(file);
-			client.Close(HttpStatusCode.ResetContent);
-
-			return;
-			error:
-			client.Error(HttpStatusCode.BadRequest);
+			if (client.Request.Url.Query.Contains("returnSelf"))
+			{
+				client.WriteAndClose(GenerateCommentHtml(comment, ""), "html", HttpStatusCode.Created);
+			}
+			else
+			{
+				// This should prevent accidently submitting a form multiple times
+				client.SetHeader("Location", client.Request.Url);
+				client.Close(HttpStatusCode.SeeOther);
+			}
 		}
 
-		private static bool ValidateComment (Comment comment)
+		private static bool Validate (this Comment comment, Article article)
 		{
 			if (comment.name.Length < commentMinNameLength ||
-			    comment.comment.Trim().Length < commentMinCommentLength)
+			    comment.comment.Trim().Length < commentMinCommentLength ||
+			    comment.replyTo >= article.CommentCount) // >= because a comment can't be a reply to itself
 				return false;
 			return true;
 		}
