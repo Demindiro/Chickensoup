@@ -1,10 +1,11 @@
 # Socket / TCP stuff
-PORT                 = 8080
-ROOT_FOLDER          = /Users/Luc/Sites/www
+PORT        = 8080
+TLS_PORT    = 8443
+ROOT_FOLDER = /Users/Luc/Sites/www
 
 # HTTP stuff
-# Cache is always 0 when the status code is 4xx or 5xx
-CACHE_MAX_AGE = 0
+# If the status code is 4xx or 5xx, then the cache is always unused
+CACHE_MAX_AGE = 3600
 
 # Files in general related stuff
 BASE_FILE            = /Users/Luc/Sites/www/base/base.html
@@ -23,6 +24,3 @@ COMMENT_MIN_COMMENT_LENGTH = 5
 
 # Redirect related stuff
 REDIRECT_URLS_FILE = ../../redirects.json
-
-# SSL stuff
-# CERTIFICATE_PATH = /Users/Luc/Desktop/certs/fullcert.pfx

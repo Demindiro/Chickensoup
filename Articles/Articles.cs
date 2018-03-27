@@ -55,37 +55,24 @@ namespace ChickenSoup
 			servers = new HttpListener[categories.Length];
 			for (int i = 0; i < categories.Length; i++)
 			{
-				servers[i] = new HttpListener();
-				servers[i].Prefixes.Add($"http://*:{ChickenSoup.Port}/{categories[i]}/");
-				servers[i].Start();
-				servers[i].BeginGetContext(HandleNewArticleRequest, i);
+				var index = i;
+				Http.AddListener(categories[i], (context) => { context.HandleArticleRequest(index); return true; }, true);
 			}
 		}
 
-		private static void HandleNewArticleRequest(IAsyncResult ar)
+		private static Article AddArticles(int category, string[] list)
 		{
-			var i = (int)ar.AsyncState;
-			var client = servers[i].EndGetContext(ar);
-			ThreadPool.QueueUserWorkItem(ThreadPool_HandleArticleRequest, new object[] {client, i});
-			servers[i].BeginGetContext(HandleNewArticleRequest, ar.AsyncState);
-		}
-
-		private static void ThreadPool_HandleArticleRequest(object state)
-		{
-			var obj = (object[])state;
-			var client = (HttpListenerContext)obj[0];
-			client.HandleArticleRequest((int)obj[1]);
-		}
-
-		private static Article AddArticles(int index, string[] list)
-		{
-			Article art = null;
+			Article art = null, prevArt = null;
 			foreach(var entry in list)
 			{
 				if(entry != "")
 				{
-					art = new Article(entry, categories[index]);
-					articles[index][art.Name] = art;
+					art = new Article(entry, categories[category]);
+					articles[category][art.Name] = art;
+					if (prevArt != null)
+						prevArt.Next = art;
+					art.Previous = prevArt;
+					prevArt = art;
 				}
 			}
 			return art;

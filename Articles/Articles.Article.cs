@@ -14,8 +14,8 @@ namespace ChickenSoup
 			public readonly string Category;
 			public readonly string Path;
 			public readonly DateTime Date;
-			public readonly Article Next;
-			public readonly Article Previous;
+			public Article Next;
+			public Article Previous;
 			public int CommentCount
 			{
 				get
@@ -25,6 +25,7 @@ namespace ChickenSoup
 					return commentCount;
 				}
 			}
+			public string Url => Category + '/' + Name;
 
 			public Article(string name, string title, string category, string path,
 							 DateTime date, Article next = null, Article previous = null)

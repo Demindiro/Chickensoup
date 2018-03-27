@@ -11,7 +11,6 @@ namespace ChickenSoup
 		#pragma warning disable 0649
 		[Config("REDIRECT_URLS_FILE")] internal static string urlFilePath;
 		#pragma warning restore 0649
-		private static HttpListener server;
 
 		public static readonly Dictionary<string, string> Urls = new Dictionary<string, string>();
 
@@ -31,31 +30,27 @@ namespace ChickenSoup
 			{
 				File.Create(urlFilePath).Close();
 			}
-			server = new HttpListener();
-			server.Prefixes.Add($"http://*:{ChickenSoup.Port}/rdr/");
-			server.Start();
-			server.BeginGetContext(RedirectClient, null);
+			Http.AddListener("rdr", RedirectClient, true);
 		}
 
-		private static void RedirectClient(IAsyncResult ar)
+		private static bool RedirectClient(HttpListenerContext context)
 		{
-			var client = server.EndGetContext(ar);
-			server.BeginGetContext(RedirectClient, null);
-			var url    = client.Request.Url.Segments;
+			var url = context.Request.Url.Segments;
 			if (url.Length < 3)
 			{
-				client.Error(HttpStatusCode.BadRequest);
-				return;
+				context.Error(HttpStatusCode.BadRequest);
+				return true;
 			}
-			var key = client.Request.Url.Segments[2];
+			var key = context.Request.Url.Segments[2];
 			if(!Urls.ContainsKey(key))
 			{
-				client.Error(HttpStatusCode.BadRequest);
-				return;
+				context.Error(HttpStatusCode.BadRequest);
+				return true;
 			}
-			client.SetHeader("Location", Urls[key]);
-			client.Response.StatusCode = (int)HttpStatusCode.Found;
-			client.Response.Close();
+			context.SetHeader("Location", Urls[key]);
+			context.Response.StatusCode = (int)HttpStatusCode.Found;
+			context.Response.Close();
+			return true;
 		}
 	}
 }

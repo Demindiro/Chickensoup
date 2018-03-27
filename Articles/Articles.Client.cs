@@ -74,9 +74,28 @@ namespace ChickenSoup
 						throw new FormatException($"Comment file of {article.Name} has an invalid comment: {comment}");
 				var response = ArticleTemplate.Replace("{title}", article.Title)
 				                              .Replace("{time}", article.Date.ToString())
-				                              .Replace("{time(O)}", article.Date.ToString("O"))
-				                              .Replace("{content}", File.ReadAllText(path))
-				                              .Replace("{comments}", GenerateCommentHtml(tree));
+				                              .Replace("{time(O)}", article.Date.ToString("O"));
+				Action<Article, string, string> replaceLinks = (otherArticle, replace, conditional) =>
+				{
+					if (otherArticle != null)
+					{
+						response = response.Replace(replace, otherArticle.Url);
+						response.Replace(replace, "");
+						response.Replace(conditional, "");
+					}
+					else
+					{
+						var s = response.IndexOf(conditional, StringComparison.InvariantCulture);
+						if (s < 0)
+							return;
+						var e = response.IndexOf(")}", s + conditional.Length, StringComparison.InvariantCulture) + 2;
+				        response = response.Remove(s, e - s);
+					}	
+				};
+				replaceLinks(article.Next, "{next}", "{next??(");
+				replaceLinks(article.Previous, "{previous}", "{previous??(");
+				response = response.Replace("{content}", File.ReadAllText(path))
+				                   .Replace("{comments}", GenerateCommentHtml(tree));
 				client.WriteAndClose(response, "html", HttpStatusCode.OK);
 			}
 			else

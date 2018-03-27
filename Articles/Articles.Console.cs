@@ -1,35 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace ChickenSoup
 {
-	using Configuration;
 	public static partial class Articles
 	{
-		public static void AddArticle(string category, string name, string title, string path)
-		{
-			var i = GetCategoryIndex(category);
-			if (i < 0)
-				throw new ArgumentException($"Category \"{category}\" does not exist", nameof(category));
-			if (articles[i].ContainsKey(name))
-				throw new ArgumentException($"Article \"{name}\" in \"{category}\" does already exist", nameof(name));
-
-			var fpath = articleRootFolder + category + "/";
-			File.AppendAllText(fpath + "list.txt", $"{name};{title};{path};{DateTime.Now.ToString("O")}\n");
-			fpath += name;
-			if (!File.Exists(fpath + "-comments.json"))
-			{
-				File.WriteAllText(path + "-comments.json", "[]");
-				File.WriteAllText(path + "-comments-details.json", "[]");
-			}
-
-			articles[i][name] = new Article(name, title, category, path, DateTime.Now);
-			Logger.Log($"{name} added in {category}", "Base");
-			Console.WriteLine($"\x1b[32m{title} added on {DateTime.Now}\x1b[0m");
-		}
-
-
 		public static void ParseCommand(string input)
 		{
 			string[] v = input.Split(' ');
@@ -51,6 +26,26 @@ namespace ChickenSoup
 		}
 
 
+		public static void AddArticle(string category, string name, string title, string path)
+		{
+			var i = GetCategoryIndex(category);
+			if (i < 0)
+				throw new ArgumentException($"Category \"{category}\" does not exist", nameof(category));
+			if (articles[i].ContainsKey(name))
+				throw new ArgumentException($"Article \"{name}\" in \"{category}\" does already exist", nameof(name));
+
+			var fpath = articleRootFolder + category + "/";
+			File.AppendAllText(fpath + "list.txt", $"{name};{title};{path};{DateTime.Now.ToString("O")}\n");
+			fpath += name;
+
+			var article = articles[i][name] = new Article(name, title, category, path, DateTime.Now);
+			article.Previous = lastArticles[i];
+			lastArticles[i] = article;
+			Logger.Log($"{name} added in {category}");
+			Console.WriteLine($"\x1b[32m{title} added on {DateTime.Now}\x1b[0m");
+		}
+
+
 		public static void RemoveArticle(string category, string name)
 		{
 			var i = GetCategoryIndex(category);
@@ -69,39 +64,15 @@ namespace ChickenSoup
 			var startIndex = list.IndexOf('\n' + name, StringComparison.InvariantCulture) + 1;
 			var endIndex   = list.IndexOf('\n', startIndex) + 1;
 			File.WriteAllText(path, list.Remove(startIndex, endIndex - startIndex));
+
+			var article = articles[i][name];
+			if (article.Next != null)
+				article.Next.Previous = article.Previous;
+			if (article.Previous != null)
+				article.Previous.Next = article.Next;
 			articles[i].Remove(name);
 			Console.WriteLine($"\x1b[32mArticle \"{name}\" in category " +
 			                  $"\"{category}\" has been removed\x1b[0m");
 		}
-
-		/*
-		private static string[] SplitIntoArguments(this string str)
-		{
-			var argv = new List<string>();
-			int i;
-			for(i = 0; i < str.Length; i++)
-			{
-				if(str[i] == '"')
-				{
-					i++;
-					var j = str.IndexOf('"', i);
-					argv.Add(str.Substring(i, j - i));
-					i = j + 1;
-				}
-				else
-				{
-					var j = str.IndexOf(' ', i);
-					if(j < 0)
-					{
-						argv.Add(str.Substring(i));
-						break;
-					}
-					argv.Add(str.Substring(i, j - i));
-					i = j;
-				}
-			}
-			return argv.ToArray();
-		}
-		*/
 	}
 }

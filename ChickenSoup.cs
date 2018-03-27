@@ -11,16 +11,12 @@ namespace ChickenSoup
 	{
 		// TODO figure out how to disable the warning for all fields with this attribute
 		#pragma warning disable 0649
-		[Config("PORT")] private static ushort port;
 		[Config("BASE_FILE"   , LoadFileContents = true)] public static readonly string BaseFile;
 		[Config("DEFAULT_FILE", LoadFileContents = true)] public static readonly string DefaultFile;
 		[Config("ERROR_FILE"  , LoadFileContents = true)] public static readonly string ErrorSnippet;
 		#pragma warning restore 0649
 		[Config("ROOT_FOLDER")]   private static string rootFolder;
-		[Config("CACHE_MAX_AGE")] public static readonly int CacheMaxAge;
-		private static HttpListener server;
 
-		public static ushort Port       => port;
 		public static string RootFolder => rootFolder;
 
 		public static int Main(string[] args)
@@ -44,10 +40,7 @@ namespace ChickenSoup
 			Articles.Init();
 			Redirect.Init();
 
-			server = new HttpListener();
-			server.Prefixes.Add($"http://*:{port}/");
-			server.Start();
-			server.BeginGetContext(HandleNewRequest, null);
+			Http.AddListener("", HandleRequest, true);
 
 			while (true)
 			{
@@ -85,26 +78,18 @@ namespace ChickenSoup
 			return ret;
 		}
 
-		private static void HandleNewRequest(IAsyncResult ar)
+		private static bool HandleRequest(HttpListenerContext context)
 		{
-			var client = server.EndGetContext(ar);
-			ThreadPool.QueueUserWorkItem(HandleRequest, client);
-			server.BeginGetContext(HandleNewRequest, null);
-		}
-
-		private static void HandleRequest(object state)
-		{
-			var client = (HttpListenerContext)state;
-			Logger.Log(client.Stringify(), "Base");
 			try
 			{
-				GetFile(client);
+				GetFile(context);
 			}
 			catch(Exception ex)
 			{
-				Logger.Log(ex.Message, "Base", LogType.Error);
-				client.Close(HttpStatusCode.InternalServerError);
+				Logger.Log(ex.Message, LogType.Error);
+				context.Error(HttpStatusCode.InternalServerError);
 			}
+			return true;
 		}
 
 
@@ -133,10 +118,10 @@ namespace ChickenSoup
 			}
 			else
 			{
+				format = path.Substring(dotIndex + 1);
 				path = RootFolder + path;
 				if (client.ErrorOnNonExists(path))
 					return;
-				format = path.Substring(dotIndex + 1);
 				client.WriteAndClose(File.ReadAllBytes(path), format, HttpStatusCode.OK);
 			}
 		}

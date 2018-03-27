@@ -24,7 +24,7 @@ namespace ChickenSoup
 		}
 
 
-		public static void Log(string msg, string tag, LogType type = LogType.Info)
+		public static void Log(string msg, LogType type = LogType.Info)
 		{
 			lock(logPath)
 			{
@@ -34,7 +34,7 @@ namespace ChickenSoup
 				    #endif
 				   )
 					OpenLog();
-				writer.Write($"[{type.Parse()}][{DateTime.Now.ToString("HH:mm:ss")}][{tag}] {msg}\n");
+				writer.Write($"[{type.Parse()}][{DateTime.Now.ToString("HH:mm:ss")}] {msg}\n");
 			}
 		}
 
