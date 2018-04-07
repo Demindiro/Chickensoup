@@ -40,7 +40,7 @@ namespace ChickenSoup
 			Articles.Init();
 			Redirect.Init();
 
-			Http.AddListener("", HandleRequest, true);
+			Http.AddListener("", HandleRequest);
 
 			while (true)
 			{
@@ -80,15 +80,17 @@ namespace ChickenSoup
 
 		private static bool HandleRequest(HttpListenerContext context)
 		{
-			try
-			{
-				GetFile(context);
-			}
-			catch(Exception ex)
-			{
-				Logger.Log(ex.Message, LogType.Error);
-				context.Error(HttpStatusCode.InternalServerError);
-			}
+			ThreadPool.QueueUserWorkItem(delegate {
+				try
+				{
+					GetFile(context);
+				}
+				catch(Exception ex)
+				{
+					Logger.Log(ex.Message, LogType.Error);
+					context.Error(HttpStatusCode.InternalServerError);
+				}
+			});
 			return true;
 		}
 

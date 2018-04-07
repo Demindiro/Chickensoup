@@ -6,6 +6,7 @@ using System.Text;
 
 namespace ChickenSoup
 {
+	using System.Threading;
 	using Configuration;
 	public static partial class Articles
 	{
@@ -122,28 +123,32 @@ namespace ChickenSoup
 		}
 
 
-		private static void HandleArticleRequest(this HttpListenerContext client, int categoryIndex)
+		private static bool HandleArticleRequest(this HttpListenerContext client, int categoryIndex)
 		{
-			var r = client.Request;
-			var segments = r.Url.Segments;
-			
-			if (r.HttpMethod == "GET")
+			ThreadPool.QueueUserWorkItem(delegate
 			{
-				if (segments.Length == 2)
-					client.GetSummary(categoryIndex);
-				else if (r.QueryString["comments"] != null)
-					client.GetComments(categoryIndex);
+				var r = client.Request;
+				var segments = r.Url.Segments;
+
+				if (r.HttpMethod == "GET")
+				{
+					if (segments.Length == 2)
+						client.GetSummary(categoryIndex);
+					else if (r.QueryString["comments"] != null)
+						client.GetComments(categoryIndex);
+					else
+						client.GetArticle(categoryIndex);
+				}
+				else if (r.HttpMethod == "POST")
+				{
+					client.AddComment(categoryIndex);
+				}
 				else
-					client.GetArticle(categoryIndex);
-			}
-			else if (r.HttpMethod == "POST")
-			{
-				client.AddComment(categoryIndex);
-			}
-			else
-			{
-				client.Error(HttpStatusCode.BadRequest);
-			}
+				{
+					client.Error(HttpStatusCode.BadRequest);
+				}
+			});
+			return true;
 		}
 
 

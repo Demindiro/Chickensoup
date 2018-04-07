@@ -81,43 +81,29 @@ namespace ChickenSoup
 			Logger.Log(context.Stringify());
 		}
 
-		public static void AddListener(string url, Callback callback, bool useThreadPool)
+		public static void AddListener(string url, Callback callback)
 		{
 			var server = new HttpListener();
 			server.Prefixes.Add($"http://*:{Port}/{url}/");
 			if (TlsPort != 0)
 				server.Prefixes.Add($"https://*:{TlsPort}/{url}/");
 			server.Start();
-			AsyncCallback serverCallback;
-			if (useThreadPool)
-				serverCallback = HandleNewContextThreadPool;
-			else
-				serverCallback = HandleNewContext;
-			server.BeginGetContext(serverCallback, new object[] {server, callback});
+			server.BeginGetContext(HandleNewContext, new object[] {server, callback});
 		}
 
 		private static void HandleNewContext(IAsyncResult ar)
 		{
 			if (ExtractAsyncResult(ar, out var server, out var context, out var callback))
-				HandleNewContext(server, context, callback, ar.AsyncState);
+			{
+				if (callback(context))
+					server.BeginGetContext(HandleNewContext, ar.AsyncState);
+				else
+					server.Close();
+			}
 			else
+			{
 				server.BeginGetContext(HandleNewContext, ar.AsyncState);
-		}
-
-		private static void HandleNewContext(HttpListener server, HttpListenerContext context, Callback callback, object state)
-		{
-			if (!callback(context))
-				server.Close();
-			else
-				server.BeginGetContext(HandleNewContext, state);
-		}
-
-		private static void HandleNewContextThreadPool(IAsyncResult ar)
-		{
-			if (ExtractAsyncResult(ar, out var server, out var context, out var callback))
-				ThreadPool.QueueUserWorkItem(delegate { HandleNewContext(server, context, callback, ar.AsyncState); });
-			else
-				server.BeginGetContext(HandleNewContextThreadPool, ar.AsyncState);
+			}
 		}
 
 		private static bool ExtractAsyncResult(IAsyncResult ar, out HttpListener server, out HttpListenerContext context, out Callback callback)

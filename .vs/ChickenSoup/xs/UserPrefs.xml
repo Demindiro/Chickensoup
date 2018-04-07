@@ -2,10 +2,8 @@
   <MonoDevelop.Ide.ItemProperties.ChickenSoup PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="ChickenSoup Status">
     <Files>
-      <File FileName="Articles/Articles.Console.cs" Line="43" Column="30" />
-      <File FileName="Articles/Articles.cs" Line="17" Column="25" />
-      <File FileName="Redirect/Redirect.cs" Line="14" Column="1" />
-      <File FileName="Properties/AssemblyInfo.cs" Line="26" Column="34" />
+      <File FileName="Articles/Articles.Console.cs" Line="22" Column="30" />
+      <File FileName="Articles/Articles.cs" Line="60" Column="5" />
       <File FileName="ChickenSoup Status" />
     </Files>
   </MonoDevelop.Ide.Workbench>
@@ -14,7 +12,6 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/Luc/Projects/C#/ChickenSoup/Articles/Articles.Comments.cs" relfile="Articles/Articles.Comments.cs" line="51" column="1" />
-      <Breakpoint file="/Users/Luc/Projects/C#/ChickenSoup/Articles/Articles.Client.cs" relfile="Articles/Articles.Client.cs" line="110" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

@@ -56,7 +56,7 @@ namespace ChickenSoup
 			                       FileAccess.Write,
 			                       FileShare.Read);
 			stream.Seek(0, SeekOrigin.End);
-			writer = new StreamWriter(stream);
+			writer = new StreamWriter(stream, Encoding.UTF8, 1024, false);
 			//writer.AutoFlush = true; // Suddenly gone... odd
 			logFileDay = DateTime.Now.Day;
 #else

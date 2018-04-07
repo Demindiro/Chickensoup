@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Threading;
 using Configuration;
 
 namespace ChickenSoup
@@ -30,26 +31,29 @@ namespace ChickenSoup
 			{
 				File.Create(urlFilePath).Close();
 			}
-			Http.AddListener("rdr", RedirectClient, true);
+			Http.AddListener("rdr", RedirectClient);
 		}
 
 		private static bool RedirectClient(HttpListenerContext context)
 		{
-			var url = context.Request.Url.Segments;
-			if (url.Length < 3)
+			ThreadPool.QueueUserWorkItem(delegate
 			{
-				context.Error(HttpStatusCode.BadRequest);
-				return true;
-			}
-			var key = context.Request.Url.Segments[2];
-			if(!Urls.ContainsKey(key))
-			{
-				context.Error(HttpStatusCode.BadRequest);
-				return true;
-			}
-			context.SetHeader("Location", Urls[key]);
-			context.Response.StatusCode = (int)HttpStatusCode.Found;
-			context.Response.Close();
+				var url = context.Request.Url.Segments;
+				if (url.Length < 3)
+				{
+					context.Error(HttpStatusCode.BadRequest);
+					return;
+				}
+				var key = context.Request.Url.Segments[2];
+				if(!Urls.ContainsKey(key))
+				{
+					context.Error(HttpStatusCode.BadRequest);
+					return;
+				}
+				context.SetHeader("Location", Urls[key]);
+				context.Response.StatusCode = (int)HttpStatusCode.Found;
+				context.Response.Close();
+			});
 			return true;
 		}
 	}

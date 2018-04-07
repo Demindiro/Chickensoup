@@ -56,7 +56,7 @@ namespace ChickenSoup
 			for (int i = 0; i < categories.Length; i++)
 			{
 				var index = i;
-				Http.AddListener(categories[i], (context) => { context.HandleArticleRequest(index); return true; }, true);
+				Http.AddListener(categories[i], (context) => context.HandleArticleRequest(index));
 			}
 		}
 
