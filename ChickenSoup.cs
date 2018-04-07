@@ -4,6 +4,7 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using Configuration;
+using Commands;
 
 namespace ChickenSoup
 {
@@ -25,6 +26,9 @@ namespace ChickenSoup
 			if (ret <= 0)
 				return -ret;
 
+			Command.RegisterCommands();
+			Command.AddCommand("config reload", Config.ReadConfigFile);
+
 			try
 			{
 				Configuration.Config.ReadConfigFile();
@@ -45,10 +49,9 @@ namespace ChickenSoup
 			while (true)
 			{
 				Console.Write(">> ");
-				string input = Console.ReadLine();
 				try
 				{
-					ParseCommand(input);
+					Command.Parse(Console.ReadLine());
 				}
 				catch(Exception ex)
 				{
@@ -80,7 +83,8 @@ namespace ChickenSoup
 
 		private static bool HandleRequest(HttpListenerContext context)
 		{
-			ThreadPool.QueueUserWorkItem(delegate {
+			ThreadPool.QueueUserWorkItem(delegate
+			{
 				try
 				{
 					GetFile(context);

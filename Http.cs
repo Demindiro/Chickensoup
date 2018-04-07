@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Text;
 namespace ChickenSoup
@@ -129,6 +130,12 @@ namespace ChickenSoup
 			if (code == 200)
 				return true;
 			return false;
+		}
+
+		private static void Write(this Stream stream, byte[] data)
+		{
+			if (data != null)
+				stream.Write(data, 0, data.Length);
 		}
 	}
 }

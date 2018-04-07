@@ -34,6 +34,7 @@ namespace ChickenSoup
 					}
 					break;
 				case ConsoleKey.Enter:
+					WriteLine();
 					goto finish;
 				default:
 					sb.Append(c);
@@ -47,6 +48,7 @@ namespace ChickenSoup
 
 		public static void Write(object obj) => System.Console.Write(obj);
 		public static void WriteLine(object obj) => System.Console.WriteLine(obj);
+		public static void WriteLine() => System.Console.WriteLine();
 
 		private static void AutoCompleteInput(StringBuilder sb)
 		{

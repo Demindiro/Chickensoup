@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChickenSoup", "ChickenSoup.csproj", "{FAAF862E-6129-48EF-BDDB-6CB93A72045C}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "JSON", "..\Libraries\JSON\JSON\JSON.shproj", "{634FF80A-FC17-49A4-BD62-DA263243AAF1}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Configuration", "..\Libraries\Configuration\Configuration.shproj", "{49670421-B220-42A0-9FA1-32B5B16CEFE5}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Commands", "..\Libraries\Commands\Commands.shproj", "{F66B8E9D-26C6-4375-937E-11BC8378C92E}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Conversion", "..\Libraries\Conversion\Conversion.shproj", "{5FD909C4-F858-4593-8076-2668C4CE7073}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

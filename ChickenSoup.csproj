@@ -36,31 +36,23 @@
     <Compile Include="ChickenSoup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Http.cs" />
-    <Compile Include="ChickenSoup.Console.cs" />
     <None Include="config.txt" />
     <None Include="redirects" />
     <Compile Include="Logger.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="Articles\Articles.cs" />
     <Compile Include="Articles\Articles.Client.cs" />
     <Compile Include="Articles\Articles.Comments.cs" />
-    <Compile Include="Articles\Articles.Console.cs" />
-    <Compile Include="Config.Console.cs" />
-    <Compile Include="Redirect\Redirect.cs" />
-    <Compile Include="Redirect\Redirect.Console.cs" />
     <Compile Include="Articles\Articles.Article.cs" />
     <Compile Include="Articles\Articles.Comment.cs" />
     <Compile Include="MimeType.cs" />
     <Compile Include="Console.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="README.txt" />
+    <Compile Include="Redirect.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Articles\" />
-    <Folder Include="Articles\Comments\" />
-    <Folder Include="Redirect\" />
   </ItemGroup>
+  <Import Project="..\Libraries\Conversion\Conversion.projitems" Label="Shared" Condition="Exists('..\Libraries\Conversion\Conversion.projitems')" />
+  <Import Project="..\Libraries\Commands\Commands.projitems" Label="Shared" Condition="Exists('..\Libraries\Commands\Commands.projitems')" />
   <Import Project="..\Libraries\Configuration\Configuration.projitems" Label="Shared" Condition="Exists('..\Libraries\Configuration\Configuration.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

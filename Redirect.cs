@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading;
+using Commands;
 using Configuration;
 
 namespace ChickenSoup
@@ -55,6 +56,33 @@ namespace ChickenSoup
 				context.Response.Close();
 			});
 			return true;
+		}
+
+
+		[Command("redirect add")]
+		private static void Add(string uri, string location)
+		{
+			if(Urls.ContainsKey(uri))
+			{
+				Console.WriteLine($"Redirect URI \"{uri}\" already exists. Overwrite? (Y/N) ");
+				if(char.ToUpper(Console.ReadLine()[0]) != 'Y')
+					return;
+			}
+			Urls[uri] = location;
+			File.AppendAllText(urlFilePath, uri + ':' + location);
+		}
+
+		[Command("redirect remove")]
+		private static void Remove(string uri)
+		{
+			if(!Urls.ContainsKey(uri))
+				throw new ArgumentException($"URI \"{uri}\" is not defined", nameof(uri));
+			Urls.Remove(uri);
+			var urls = new string[Urls.Count];
+			int i = 0;
+			foreach (var item in Urls)
+				urls[i++] = item.Key + ':' + item.Value;
+			File.WriteAllLines(urlFilePath, urls);
 		}
 	}
 }
