@@ -35,7 +35,21 @@ namespace ChickenSoup
 				   )
 					OpenLog();
 				writer.Write($"[{type.Parse()}][{DateTime.Now.ToString("HH:mm:ss")}] {msg}\n");
+				writer.Flush();
 			}
+		}
+
+		public static void Log(Exception ex)
+		{
+			var msg = "An exception has been thrown:\n";
+			while (ex != null)
+			{
+				msg += $" {ex.GetType()}: {ex.Message}\n";
+				msg += ex.StackTrace + "\n";
+				msg += "\n";
+				ex = ex.InnerException;
+			}
+			Log(msg, LogType.Error);
 		}
 
 		public static void Close()

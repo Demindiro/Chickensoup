@@ -81,7 +81,7 @@ namespace ChickenSoup
 
 
 		[Command("article add")]
-		public static void AddArticle(string category, string name, string title, string path)
+		static void AddArticle(string category, string name, string title, string path)
 		{
 			var i = GetCategoryIndex(category);
 			if (i < 0)
@@ -100,8 +100,9 @@ namespace ChickenSoup
 			Console.WriteLine($"\x1b[32m{title} added on {DateTime.Now}\x1b[0m");
 		}
 
+
 		[Command("article remove")]
-		public static void RemoveArticle(string category, string name)
+		static void RemoveArticle(string category, string name)
 		{
 			var i = GetCategoryIndex(category);
 			if (i < 0)

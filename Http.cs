@@ -26,11 +26,19 @@ namespace ChickenSoup
 			int i = error.IndexOf("<error>", StringComparison.InvariantCultureIgnoreCase);
 			if (i < 0)
 				throw new FormatException("<error> tag missing");
-			client.Response.StatusCode = (int)code;
-			client.SetHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-			error = error.Insert(i + "<error>".Length, $"Error {(int)code}: {client.Response.StatusDescription}");
-			error = error.WrapContent();
-			client.WriteAndClose(Encoding.UTF8.GetBytes(error), "html", code);
+			try
+			{
+				client.Response.StatusCode = (int)code;
+				client.SetHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+				error = error.Insert(i + "<error>".Length, $"Error {(int)code}: {client.Response.StatusDescription}");
+				error = error.WrapContent();
+				client.WriteAndClose(Encoding.UTF8.GetBytes(error), "html", code);
+			}
+			catch (Exception ex)
+			{
+				Logger.Log(ex);
+				client.Response.OutputStream.Close();
+			}
 		}
 
 
@@ -58,7 +66,6 @@ namespace ChickenSoup
 		}
 		public static void Write(this HttpListenerContext client, byte[] data, string fileExt)
 		{
-			client.SetHeader("Server", "ChickenSoup/" + Configuration.Config.Version);
 			client.SetHeader("Cache-Control", "public, max-age=" + CacheMaxAge);
 			client.Response.ContentType = MimeType.GetMimeType(fileExt);
 			client.Write(data);
@@ -75,12 +82,12 @@ namespace ChickenSoup
 		public static void WriteAndClose(this HttpListenerContext context, byte[] data, string fileExt, HttpStatusCode code)
 		{
 			context.Response.StatusCode = (int)code;
-			context.SetHeader("Server", "ChickenSoup/" + Configuration.Config.Version);
 			context.Response.ContentLength64 = data.Length;
 			context.Write(data, fileExt);
 			context.Response.Close();
 			Logger.Log(context.Stringify());
 		}
+
 
 		public static void AddListener(string url, Callback callback)
 		{
@@ -92,10 +99,12 @@ namespace ChickenSoup
 			server.BeginGetContext(HandleNewContext, new object[] {server, callback});
 		}
 
+		static System.Collections.Generic.List<HttpListenerContext> _cmpList = new System.Collections.Generic.List<HttpListenerContext>();
 		private static void HandleNewContext(IAsyncResult ar)
 		{
 			if (ExtractAsyncResult(ar, out var server, out var context, out var callback))
 			{
+				context.SetHeader("Server", "ChickenSoup/" + Configuration.Config.Version);
 				if (callback(context))
 					server.BeginGetContext(HandleNewContext, ar.AsyncState);
 				else
@@ -119,7 +128,7 @@ namespace ChickenSoup
 			}
 			catch (Exception ex)
 			{
-				Logger.Log(ex.Message, LogType.Error);
+				Logger.Log(ex);
 				context = null;
 				return false;
 			}

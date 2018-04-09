@@ -89,9 +89,9 @@ namespace ChickenSoup
 				{
 					GetFile(context);
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
-					Logger.Log(ex.Message, LogType.Error);
+					Logger.Log(ex);
 					context.Error(HttpStatusCode.InternalServerError);
 				}
 			});

@@ -1,9 +1,17 @@
 ﻿<Properties StartupConfiguration="{FAAF862E-6129-48EF-BDDB-6CB93A72045C}|Default" GitUserInfo="UsingMD">
   <MonoDevelop.Ide.ItemProperties.ChickenSoup PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.ItemProperties.Conversion FirstBuild="True" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Properties/AssemblyInfo.cs">
+    <Files>
+      <File FileName="Articles/Articles.cs" Line="101" Column="4" />
+      <File FileName="MimeType.cs" Line="579" Column="1" />
+      <File FileName="Http.cs" Line="20" Column="28" />
+      <File FileName="ChickenSoup.cs" Line="113" Column="12" />
+      <File FileName="Properties/AssemblyInfo.cs" Line="21" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.ItemProperties.Configuration FirstBuild="True" />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/Luc/Projects/C#/ChickenSoup/Articles/Articles.Comments.cs" relfile="Articles/Articles.Comments.cs" line="51" column="1" />
