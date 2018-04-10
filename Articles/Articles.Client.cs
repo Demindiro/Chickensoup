@@ -62,6 +62,11 @@ namespace ChickenSoup
 				client.GetFile();
 				return;
 			}
+			if (!articles[categoryIndex].ContainsKey(url[2]))
+			{
+				client.Error(HttpStatusCode.NotFound);
+				return;
+			}
 			var article = articles[categoryIndex][url[2]];
 			var path = ChickenSoup.RootFolder + article.Path;
 			if (File.Exists(path))
