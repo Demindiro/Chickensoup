@@ -38,8 +38,6 @@ namespace ChickenSoup
 				Console.Error.WriteLine(ex.Message);
 				return 1;
 			}
-			if (!rootFolder.EndsWith("/", StringComparison.InvariantCulture))
-				rootFolder += "/";
 
 			Articles.Init();
 			Redirect.Init();
@@ -117,7 +115,7 @@ namespace ChickenSoup
 			var format = "html";
 			if (dotIndex < 0)
 			{
-				path = RootFolder + ((path == "/") ? "index.html" : path + ".html");
+				path = RootFolder + "/" + ((path == "/") ? "index.html" : path + ".html");
 				if (client.ErrorOnNonExists(path))
 					return;
 				client.WriteAndClose(File.ReadAllText(path), format, HttpStatusCode.OK);
@@ -133,13 +131,7 @@ namespace ChickenSoup
 		}
 
 
-		public static string WrapContent(this string content)
-		{
-			int i = BaseFile.IndexOf("<main>", StringComparison.InvariantCultureIgnoreCase);
-			if (i < 0)
-				throw new FormatException("<main> tag missing");
-			return BaseFile.Insert(i + "<main>".Length, content);
-		}
+		public static string WrapContent(this string content) => BaseFile.Replace("{main}", content);
 
 
 		private static bool ErrorOnNonExists(this HttpListenerContext client, string path)

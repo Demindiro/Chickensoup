@@ -99,20 +99,30 @@ namespace ChickenSoup
 			server.BeginGetContext(HandleNewContext, new object[] {server, callback});
 		}
 
-		static System.Collections.Generic.List<HttpListenerContext> _cmpList = new System.Collections.Generic.List<HttpListenerContext>();
 		private static void HandleNewContext(IAsyncResult ar)
 		{
-			if (ExtractAsyncResult(ar, out var server, out var context, out var callback))
+			try
 			{
-				context.SetHeader("Server", "ChickenSoup/" + Configuration.Config.Version);
-				if (callback(context))
-					server.BeginGetContext(HandleNewContext, ar.AsyncState);
+				if (ExtractAsyncResult(ar, out var server, out var context, out var callback))
+				{
+					context.SetHeader("Server", "ChickenSoup/" + Configuration.Config.Version);
+					if (callback(context))
+						server.BeginGetContext(HandleNewContext, ar.AsyncState);
+					else
+						server.Close();
+				}
 				else
-					server.Close();
+				{
+					server.BeginGetContext(HandleNewContext, ar.AsyncState);
+				}
 			}
-			else
+			catch (Exception ex)
 			{
-				server.BeginGetContext(HandleNewContext, ar.AsyncState);
+				Console.Write(
+					$"=== An exception occured ===\n" +
+					$"{ex}\n" +
+					$"============================\n"
+				);
 			}
 		}
 
