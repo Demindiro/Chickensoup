@@ -43,7 +43,6 @@
     <Compile Include="Articles\Articles.Comment.cs" />
     <Compile Include="MimeType.cs" />
     <Compile Include="Console.cs" />
-    <Compile Include="Redirect.cs" />
     <None Include="Properties\AssemblyInfo.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AssemblyInfo.cs</LastGenOutput>
@@ -51,9 +50,14 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <DependentUpon>AssemblyInfo.tt</DependentUpon>
     </Compile>
+    <Compile Include="Plugins\Plugin.cs" />
+    <Compile Include="Plugins\PluginLoader.cs" />
+    <Compile Include="Plugins\PluginAttribute.cs" />
+    <Compile Include="Plugins\PluginTextWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Articles\" />
+    <Folder Include="Plugins\" />
   </ItemGroup>
   <Import Project="..\Libraries\Conversion\Conversion.projitems" Label="Shared" Condition="Exists('..\Libraries\Conversion\Conversion.projitems')" />
   <Import Project="..\Libraries\Commands\Commands.projitems" Label="Shared" Condition="Exists('..\Libraries\Commands\Commands.projitems')" />

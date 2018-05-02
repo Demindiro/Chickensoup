@@ -20,7 +20,7 @@ namespace ChickenSoup
 			client.Response.Close();
 		}
 
-		internal static void Error(this HttpListenerContext client, HttpStatusCode code)
+		public static void Error(this HttpListenerContext client, HttpStatusCode code)
 		{
 			var error = ChickenSoup.ErrorSnippet;
 			int i = error.IndexOf("<error>", StringComparison.InvariantCultureIgnoreCase);

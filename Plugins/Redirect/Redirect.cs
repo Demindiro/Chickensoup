@@ -1,22 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading;
+using ChickenSoup;
+using ChickenSoup.Plugins;
 using Commands;
 using Configuration;
 
-namespace ChickenSoup
+namespace Redirect
 {
-	public static partial class Redirect
+	[Plugin("Redirect")]
+	public class Redirect : Plugin
 	{
 		#pragma warning disable 0649
-		[Config("REDIRECT_URLS_FILE")] internal static string urlFilePath;
+		[Config("REDIRECT_URLS_FILE")] public static string urlFilePath;
 		#pragma warning restore 0649
 
 		public static readonly Dictionary<string, string> Urls = new Dictionary<string, string>();
+		private static new TextWriter Writer;
 
-		public static void Init()
+		public Redirect()
 		{
 			if(File.Exists(urlFilePath))
 			{
@@ -32,6 +35,7 @@ namespace ChickenSoup
 			{
 				File.Create(urlFilePath).Close();
 			}
+			Writer = base.Writer;
 			Http.AddListener("rdr", RedirectClient);
 		}
 
@@ -64,7 +68,7 @@ namespace ChickenSoup
 		{
 			if(Urls.ContainsKey(uri))
 			{
-				Console.WriteLine($"Redirect URI \"{uri}\" already exists. Overwrite? (Y/N) ");
+				Writer.WriteLine($"Redirect URI \"{uri}\" already exists. Overwrite? (Y/N) ");
 				if(char.ToUpper(Console.ReadLine()[0]) != 'Y')
 					return;
 			}
@@ -76,7 +80,7 @@ namespace ChickenSoup
 		private static void Remove(string uri)
 		{
 			if(!Urls.ContainsKey(uri))
-				throw new ArgumentException($"URI \"{uri}\" is not defined", nameof(uri));
+				throw new System.ArgumentException($"URI \"{uri}\" is not defined", nameof(uri));
 			Urls.Remove(uri);
 			var urls = new string[Urls.Count];
 			int i = 0;

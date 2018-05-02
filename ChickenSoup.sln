@@ -9,6 +9,10 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Commands", "..\Libraries\Co
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Conversion", "..\Libraries\Conversion\Conversion.shproj", "{5FD909C4-F858-4593-8076-2668C4CE7073}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{B68EB2B4-46E4-4742-A2D9-75C23945F1B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redirect", "Plugins\Redirect\Redirect.csproj", "{C4F99860-71EA-430A-AA22-26CEBFF9077A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -19,6 +23,10 @@ Global
 		{FAAF862E-6129-48EF-BDDB-6CB93A72045C}.Debug|x86.Build.0 = Debug|x86
 		{FAAF862E-6129-48EF-BDDB-6CB93A72045C}.Release|x86.ActiveCfg = Release|x86
 		{FAAF862E-6129-48EF-BDDB-6CB93A72045C}.Release|x86.Build.0 = Release|x86
+		{C4F99860-71EA-430A-AA22-26CEBFF9077A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C4F99860-71EA-430A-AA22-26CEBFF9077A}.Debug|x86.Build.0 = Debug|Any CPU
+		{C4F99860-71EA-430A-AA22-26CEBFF9077A}.Release|x86.ActiveCfg = Release|Any CPU
+		{C4F99860-71EA-430A-AA22-26CEBFF9077A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
@@ -35,5 +43,8 @@ Global
 		$4.FileSeparator = ", "
 		$4.LastFilePostfix = @:\n
 		$4.LineAlign = 0
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C4F99860-71EA-430A-AA22-26CEBFF9077A} = {B68EB2B4-46E4-4742-A2D9-75C23945F1B3}
 	EndGlobalSection
 EndGlobal

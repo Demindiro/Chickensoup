@@ -31,16 +31,22 @@ namespace ChickenSoup
 
 			try
 			{
-				Configuration.Config.ReadConfigFile();
+				Configuration.Config.ReadConfigFile(true);
+				Plugins.PluginLoader.LoadPlugins();
 			}
 			catch (Exception ex)
 			{
-				Console.Error.WriteLine(ex.Message);
+				var prefix = "";
+				while(ex != null)
+				{
+					Console.Error.WriteLine(prefix + ex.Message);
+					ex = ex.InnerException;
+					prefix += "  ";
+				}
 				return 1;
 			}
 
 			Articles.Init();
-			Redirect.Init();
 
 			Http.AddListener("", HandleRequest);
 

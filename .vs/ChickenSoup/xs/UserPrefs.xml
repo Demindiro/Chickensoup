@@ -3,9 +3,11 @@
   <MonoDevelop.Ide.ItemProperties.Conversion FirstBuild="True" />
   <MonoDevelop.Ide.Workbench ActiveDocument="ChickenSoup Status">
     <Files>
-      <File FileName="Http.cs" Line="12" Column="3" />
-      <File FileName="ChickenSoup.cs" Line="131" Column="4" />
-      <File FileName="config.txt" Line="1" Column="1" />
+      <File FileName="Plugins/Redirect/Redirect.cs" Line="25" Column="5" />
+      <File FileName="ChickenSoup.cs" Line="34" Column="1" />
+      <File FileName="Plugins/PluginLoader.cs" Line="29" Column="5" />
+      <File FileName="Plugins/Plugin.cs" Line="4" Column="2" />
+      <File FileName="config.txt" Line="30" Column="1" />
       <File FileName="ChickenSoup Status" />
     </Files>
   </MonoDevelop.Ide.Workbench>
