@@ -36,11 +36,6 @@
     <None Include="config.txt" />
     <None Include="redirects" />
     <Compile Include="Logger.cs" />
-    <Compile Include="Articles\Articles.cs" />
-    <Compile Include="Articles\Articles.Client.cs" />
-    <Compile Include="Articles\Articles.Comments.cs" />
-    <Compile Include="Articles\Articles.Article.cs" />
-    <Compile Include="Articles\Articles.Comment.cs" />
     <Compile Include="MimeType.cs" />
     <Compile Include="Console.cs" />
     <None Include="Properties\AssemblyInfo.tt">

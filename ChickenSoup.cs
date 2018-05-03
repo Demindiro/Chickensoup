@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using Configuration;
 using Commands;
 using ChickenSoup.Templates;
-using System.Text;
 
 namespace ChickenSoup
 {
@@ -23,6 +23,10 @@ namespace ChickenSoup
 		private static Template baseTemplate;
 
 		public static string RootFolder => rootFolder;
+		public static readonly Dictionary<string, TemplateFunction> Functions = new Dictionary<string, TemplateFunction>
+		{
+			{"main", (a, o) => (string)o},
+		};
 
 		public static int Main(string[] args)
 		{
@@ -38,8 +42,9 @@ namespace ChickenSoup
 				Configuration.Config.ReadConfigFile(true);
 				Plugins.PluginLoader.LoadPlugins();
 			}
-			catch (Exception ex)
+			catch (FormatException fex)
 			{
+				Exception ex = fex;
 				var prefix = "";
 				while(ex != null)
 				{
@@ -50,12 +55,7 @@ namespace ChickenSoup
 				return 1;
 			}
 
-			baseTemplate = new Template(File.ReadAllText(BaseFile), new Dictionary<string, TemplateFunction>
-			{
-				{"main", (a, o) => (string)o},
-				{"summary", GenerateSummary},
-			});
-			Articles.Init();
+			baseTemplate = new Template(File.ReadAllText(BaseFile), Functions);
 
 			Http.AddListener("", HandleRequest);
 
@@ -113,7 +113,7 @@ namespace ChickenSoup
 
 		public static string WrapContent(this string content) => baseTemplate.Process(content);
 
-		internal static void GetFile(this HttpListenerContext client)
+		public static void GetFile(this HttpListenerContext client)
 		{
 			if (client.Request.HttpMethod != "HEAD" && client.Request.HttpMethod != "GET")
 			{
@@ -144,24 +144,6 @@ namespace ChickenSoup
 					return;
 				client.WriteAndClose(File.ReadAllBytes(path), format, HttpStatusCode.OK);
 			}
-		}
-
-		// TODO move to Articles
-		private static string GenerateSummary(string args, object data)
-		{
-			var sb = new StringBuilder();
-			for (int i = 0; i < Articles.LastArticles.Count; i++)
-			{
-				var article = Articles.LastArticles[i];
-				// TODO move magic constant to settings
-				for (int j = 0; j < 3 && article != null; j++)
-				{
-					sb.Append(args.Replace("{link}", article.Url).Replace("{title}", article.Title));
-					article = article.Previous;	
-				}
-				sb.Append("<br>");
-			}
-			return sb.ToString();
 		}
 
 

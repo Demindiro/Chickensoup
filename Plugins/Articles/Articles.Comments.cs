@@ -2,18 +2,18 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using Configuration;
 
-namespace ChickenSoup
+namespace ChickenSoup.Articles
 {
-	using Configuration;
-	public static partial class Articles
+	public partial class Articles
 	{
 		#pragma warning disable 0649
 		[Config("COMMENT_MIN_COMMENT_LENGTH")] private static int commentMinCommentLength;
 		[Config("COMMENT_MIN_NAME_LENGTH")]    private static int commentMinNameLength;
 		#pragma warning restore 0649
 
-		private static void AddComment(this HttpListenerContext client, int categoryIndex)
+		private static void AddComment(HttpListenerContext client, int categoryIndex)
 		{
 			var r = client.Request;
 
@@ -48,7 +48,7 @@ namespace ChickenSoup
 			
 			var article = articles[categoryIndex][r.Url.Segments[2]];
 			var comment = new Comment(name, text, article.CommentCount, replyTo);
-			if (!comment.Validate(article))
+			if (!Validate(comment, article))
 			{
 				client.Error(HttpStatusCode.BadRequest);
 				return;
@@ -67,7 +67,7 @@ namespace ChickenSoup
 			}
 		}
 
-		private static bool Validate (this Comment comment, Article article)
+		private static bool Validate (Comment comment, Article article)
 		{
 			if (comment.name.Length < commentMinNameLength ||
 			    comment.comment.Trim().Length < commentMinCommentLength ||
@@ -77,7 +77,7 @@ namespace ChickenSoup
 		}
 
 
-		private static void GetComments (this HttpListenerContext client, int categoryIndex)
+		private static void GetComments (HttpListenerContext client, int categoryIndex)
 		{
 			var name = client.Request.Url.Segments[1];
 			var path = articleRootFolder + categories[categoryIndex] + name + "-comments";

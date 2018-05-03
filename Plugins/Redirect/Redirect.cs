@@ -7,7 +7,7 @@ using ChickenSoup.Plugins;
 using Commands;
 using Configuration;
 
-namespace Redirect
+namespace ChickenSoup.Redirect
 {
 	[Plugin("Redirect")]
 	public class Redirect : Plugin

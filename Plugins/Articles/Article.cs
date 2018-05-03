@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace ChickenSoup
+namespace ChickenSoup.Articles
 {
 	public class Article
 	{

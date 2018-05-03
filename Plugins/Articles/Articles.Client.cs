@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using ChickenSoup;
 
-namespace ChickenSoup
+namespace ChickenSoup.Articles
 {
 	using System.Threading;
 	using Configuration;
-	public static partial class Articles
+	public partial class Articles
 	{
 		private class CommentTree
 		{
@@ -48,7 +49,7 @@ namespace ChickenSoup
 		[Config("SUMMARY_COUNT")] private static int summaryCount;
 		#pragma warning restore 0649
 
-		private static void GetArticle(this HttpListenerContext client, int categoryIndex)
+		private static void GetArticle(HttpListenerContext client, int categoryIndex)
 		{
 			var req = client.Request;
 			var url = req.Url.Segments;
@@ -111,7 +112,7 @@ namespace ChickenSoup
 		}
 
 
-		private static void GetSummary(this HttpListenerContext client, int categoryIndex)
+		private static void GetSummary(HttpListenerContext client, int categoryIndex)
 		{
 			var req  = client.Request;
 			var path = req.Url.AbsolutePath;
@@ -128,7 +129,7 @@ namespace ChickenSoup
 		}
 
 
-		private static bool HandleArticleRequest(this HttpListenerContext client, int categoryIndex)
+		private static bool HandleArticleRequest(HttpListenerContext client, int categoryIndex)
 		{
 			ThreadPool.QueueUserWorkItem(delegate
 			{
@@ -138,15 +139,15 @@ namespace ChickenSoup
 				if (r.HttpMethod == "GET")
 				{
 					if (segments.Length == 2)
-						client.GetSummary(categoryIndex);
+						GetSummary(client, categoryIndex);
 					else if (r.QueryString["comments"] != null)
-						client.GetComments(categoryIndex);
+						GetComments(client, categoryIndex);
 					else
-						client.GetArticle(categoryIndex);
+						GetArticle(client, categoryIndex);
 				}
 				else if (r.HttpMethod == "POST")
 				{
-					client.AddComment(categoryIndex);
+					AddComment(client, categoryIndex);
 				}
 				else
 				{

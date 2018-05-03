@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading;
+using ChickenSoup.Plugins;
 using Commands;
+using Configuration;
 
-namespace ChickenSoup
+namespace ChickenSoup.Articles
 {
-	using Configuration;
-	public static partial class Articles
+	[Plugin("Articles")]
+	public partial class Articles : Plugin
 	{
 		#pragma warning disable 0649
 		[Config("ARTICLE_ROOT_FOLDER")] private static string articleRootFolder;
-		[Config("ARTICLE_URLS")] private static string[] categories;
+		[Config("ARTICLE_URLS")]        private static string[] categories;
 		#pragma warning restore 0649
 		private static Dictionary<string, Article>[] articles;
 		private static Article[] lastArticles;
 		private static HttpListener[] servers;
 		private static ReadOnlyCollection<Article> ro_lastArticles;
+
 
 		public static string[] Categories
 		{
@@ -34,7 +38,7 @@ namespace ChickenSoup
 		public static string RootFolder => articleRootFolder;
 
 
-		public static void Init()
+		public Articles()
 		{
 			if (articles != null)
 				throw new InvalidOperationException("Articles has already been initialized");
@@ -60,9 +64,10 @@ namespace ChickenSoup
 			for (int i = 0; i < categories.Length; i++)
 			{
 				var index = i;
-				Http.AddListener(categories[i], (context) => context.HandleArticleRequest(index));
+				Http.AddListener(categories[i], (context) => HandleArticleRequest(context, index));
 			}
 			ro_lastArticles = Array.AsReadOnly<Article>(lastArticles);
+			ChickenSoup.Functions.Add("summary", GenerateShortSummary);
 		}
 
 		private static Article AddArticles(int category, string[] list)
@@ -135,12 +140,30 @@ namespace ChickenSoup
 			                  $"\"{category}\" has been removed\x1b[0m");
 		}
 
+
 		private static int GetCategoryIndex(string category)
 		{
 			for(int i = 0; i < categories.Length; i++)
 				if(categories[i] == category)
 					return i;
 			return -100;
+		}
+
+		private static string GenerateShortSummary(string args, object data)
+		{
+			var sb = new StringBuilder();
+			for (int i = 0; i < Articles.LastArticles.Count; i++)
+			{
+				var article = Articles.LastArticles[i];
+				// TODO move magic constant to settings
+				for (int j = 0; j < 3 && article != null; j++)
+				{
+					sb.Append(args.Replace("{link}", article.Path).Replace("{title}", article.Title));
+					article = article.Previous;	
+				}
+				sb.Append("<br>");
+			}
+			return sb.ToString();
 		}
 	}
 }

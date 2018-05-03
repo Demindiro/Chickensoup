@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{B68E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redirect", "Plugins\Redirect\Redirect.csproj", "{C4F99860-71EA-430A-AA22-26CEBFF9077A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Articles", "Plugins\Articles\Articles.csproj", "{D884F201-BEB8-442E-AC67-4505203B4CAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -27,6 +29,10 @@ Global
 		{C4F99860-71EA-430A-AA22-26CEBFF9077A}.Debug|x86.Build.0 = Debug|Any CPU
 		{C4F99860-71EA-430A-AA22-26CEBFF9077A}.Release|x86.ActiveCfg = Release|Any CPU
 		{C4F99860-71EA-430A-AA22-26CEBFF9077A}.Release|x86.Build.0 = Release|Any CPU
+		{D884F201-BEB8-442E-AC67-4505203B4CAA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D884F201-BEB8-442E-AC67-4505203B4CAA}.Debug|x86.Build.0 = Debug|Any CPU
+		{D884F201-BEB8-442E-AC67-4505203B4CAA}.Release|x86.ActiveCfg = Release|Any CPU
+		{D884F201-BEB8-442E-AC67-4505203B4CAA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
@@ -46,5 +52,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C4F99860-71EA-430A-AA22-26CEBFF9077A} = {B68EB2B4-46E4-4742-A2D9-75C23945F1B3}
+		{D884F201-BEB8-442E-AC67-4505203B4CAA} = {B68EB2B4-46E4-4742-A2D9-75C23945F1B3}
 	EndGlobalSection
 EndGlobal

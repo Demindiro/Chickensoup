@@ -22,6 +22,8 @@ namespace ChickenSoup.Plugins
 					var attribute = type.GetCustomAttribute<PluginAttribute>();
 					if (attribute == null)
 						continue;
+					if (type.IsAssignableFrom(typeof(Plugin)))
+						throw new TypeLoadException($"{attribute.Name} must inherit from Plugin");
 					var plugin = (Plugin)FormatterServices.GetUninitializedObject(type);
 					plugin.Writer = new PluginTextWriter(attribute.Name);
 					list.Add(plugin);
@@ -30,7 +32,7 @@ namespace ChickenSoup.Plugins
 			Configuration.Config.ReadConfigFile(false);
 			for (int i = 0; i < list.Count; i++)
 			{
-				var constructor = list[i].GetType().GetConstructor(new Type[]{});
+				var constructor = list[i].GetType().GetConstructor(new Type[0]);
 				constructor.Invoke(list[i], new object[0]);
 			}
 		}
