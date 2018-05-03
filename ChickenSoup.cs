@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Threading;
 using Configuration;
 using Commands;
+using ChickenSoup.Templates;
+using System.Text;
 
 namespace ChickenSoup
 {
@@ -12,11 +15,12 @@ namespace ChickenSoup
 	{
 		// TODO figure out how to disable the warning for all fields with this attribute
 		#pragma warning disable 0649
-		[Config("BASE_FILE"   , LoadFileContents = true)] public static readonly string BaseFile;
-		[Config("DEFAULT_FILE", LoadFileContents = true)] public static readonly string DefaultFile;
+		[Config("BASE_FILE"   , LoadFileContents = false)] private static readonly string BaseFile;
+		[Config("DEFAULT_FILE", LoadFileContents = true)] private static readonly string DefaultFile;
 		[Config("ERROR_FILE"  , LoadFileContents = true)] public static readonly string ErrorSnippet;
+		[Config("ROOT_FOLDER")] private static string rootFolder;
 		#pragma warning restore 0649
-		[Config("ROOT_FOLDER")]   private static string rootFolder;
+		private static Template baseTemplate;
 
 		public static string RootFolder => rootFolder;
 
@@ -27,7 +31,7 @@ namespace ChickenSoup
 				return -ret;
 
 			Command.RegisterCommands();
-			Command.AddCommand("config reload", Config.ReadConfigFile);
+			Command.AddCommand("config reload", () => Config.ReadConfigFile(false));
 
 			try
 			{
@@ -46,6 +50,11 @@ namespace ChickenSoup
 				return 1;
 			}
 
+			baseTemplate = new Template(File.ReadAllText(BaseFile), new Dictionary<string, TemplateFunction>
+			{
+				{"main", (a, o) => (string)o},
+				{"summary", GenerateSummary},
+			});
 			Articles.Init();
 
 			Http.AddListener("", HandleRequest);
@@ -102,6 +111,7 @@ namespace ChickenSoup
 			return true;
 		}
 
+		public static string WrapContent(this string content) => baseTemplate.Process(content);
 
 		internal static void GetFile(this HttpListenerContext client)
 		{
@@ -136,8 +146,23 @@ namespace ChickenSoup
 			}
 		}
 
-
-		public static string WrapContent(this string content) => BaseFile.Replace("{main}", content);
+		// TODO move to Articles
+		private static string GenerateSummary(string args, object data)
+		{
+			var sb = new StringBuilder();
+			for (int i = 0; i < Articles.LastArticles.Count; i++)
+			{
+				var article = Articles.LastArticles[i];
+				// TODO move magic constant to settings
+				for (int j = 0; j < 3 && article != null; j++)
+				{
+					sb.Append(args.Replace("{link}", article.Url).Replace("{title}", article.Title));
+					article = article.Previous;	
+				}
+				sb.Append("<br>");
+			}
+			return sb.ToString();
+		}
 
 
 		private static bool ErrorOnNonExists(this HttpListenerContext client, string path)

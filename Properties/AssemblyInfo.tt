@@ -46,7 +46,7 @@ using System.Runtime.CompilerServices;
 
 <#+
 	int major = 0;
-	int minor = 8;
+	int minor = 9;
 	int build = 0;
 	string revision = "*";
 #>

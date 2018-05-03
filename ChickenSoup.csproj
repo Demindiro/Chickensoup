@@ -54,10 +54,12 @@
     <Compile Include="Plugins\PluginLoader.cs" />
     <Compile Include="Plugins\PluginAttribute.cs" />
     <Compile Include="Plugins\PluginTextWriter.cs" />
+    <Compile Include="Templates\Template.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Articles\" />
     <Folder Include="Plugins\" />
+    <Folder Include="Templates\" />
   </ItemGroup>
   <Import Project="..\Libraries\Conversion\Conversion.projitems" Label="Shared" Condition="Exists('..\Libraries\Conversion\Conversion.projitems')" />
   <Import Project="..\Libraries\Commands\Commands.projitems" Label="Shared" Condition="Exists('..\Libraries\Commands\Commands.projitems')" />

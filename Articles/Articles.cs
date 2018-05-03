@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -17,7 +18,7 @@ namespace ChickenSoup
 		private static Dictionary<string, Article>[] articles;
 		private static Article[] lastArticles;
 		private static HttpListener[] servers;
-
+		private static ReadOnlyCollection<Article> ro_lastArticles;
 
 		public static string[] Categories
 		{
@@ -29,6 +30,8 @@ namespace ChickenSoup
 				categories = value;
 			}
 		}
+		public static ReadOnlyCollection<Article> LastArticles => ro_lastArticles;
+		public static string RootFolder => articleRootFolder;
 
 
 		public static void Init()
@@ -59,6 +62,7 @@ namespace ChickenSoup
 				var index = i;
 				Http.AddListener(categories[i], (context) => context.HandleArticleRequest(index));
 			}
+			ro_lastArticles = Array.AsReadOnly<Article>(lastArticles);
 		}
 
 		private static Article AddArticles(int category, string[] list)
