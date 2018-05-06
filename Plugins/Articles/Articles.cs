@@ -37,11 +37,13 @@ namespace ChickenSoup.Articles
 		public static ReadOnlyCollection<Article> LastArticles => ro_lastArticles;
 		public static string RootFolder => articleRootFolder;
 
-
 		public Articles()
 		{
-			if (articles != null)
-				throw new InvalidOperationException("Articles has already been initialized");
+			ChickenSoup.Functions.Add("summary", GenerateShortSummary);
+		}
+
+		protected override void Init()
+		{
 			articles     = new Dictionary<string, Article>[categories.Length];
 			lastArticles = new Article[categories.Length];
 			if (!articleRootFolder.EndsWith("/", StringComparison.InvariantCulture))
@@ -67,7 +69,6 @@ namespace ChickenSoup.Articles
 				Http.AddListener(categories[i], (context) => HandleArticleRequest(context, index));
 			}
 			ro_lastArticles = Array.AsReadOnly<Article>(lastArticles);
-			ChickenSoup.Functions.Add("summary", GenerateShortSummary);
 		}
 
 		private static Article AddArticles(int category, string[] list)

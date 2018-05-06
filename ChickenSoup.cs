@@ -15,7 +15,7 @@ namespace ChickenSoup
 	{
 		// TODO figure out how to disable the warning for all fields with this attribute
 		#pragma warning disable 0649
-		[Config("BASE_FILE"   , LoadFileContents = false)] private static readonly string BaseFile;
+		[Config("BASE_FILE"   , LoadFileContents = true)] private static string BaseFile { set => baseTemplate = new Template(value, Functions); }
 		[Config("DEFAULT_FILE", LoadFileContents = true)] private static readonly string DefaultFile;
 		[Config("ERROR_FILE"  , LoadFileContents = true)] public static readonly string ErrorSnippet;
 		[Config("ROOT_FOLDER")] private static string rootFolder;
@@ -34,12 +34,8 @@ namespace ChickenSoup
 			if (ret <= 0)
 				return -ret;
 
-			Command.RegisterCommands();
-			Command.AddCommand("config reload", () => Config.ReadConfigFile(false));
-
 			try
 			{
-				Configuration.Config.ReadConfigFile(true);
 				Plugins.PluginLoader.LoadPlugins();
 			}
 			catch (FormatException fex)
@@ -55,7 +51,8 @@ namespace ChickenSoup
 				return 1;
 			}
 
-			baseTemplate = new Template(File.ReadAllText(BaseFile), Functions);
+			Command.RegisterCommands();
+			Command.AddCommand("config reload", () => Config.ReadConfigFile(false));
 
 			Http.AddListener("", HandleRequest);
 

@@ -52,7 +52,6 @@
     <Compile Include="Templates\Template.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Articles\" />
     <Folder Include="Plugins\" />
     <Folder Include="Templates\" />
   </ItemGroup>

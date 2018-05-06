@@ -19,7 +19,7 @@ namespace ChickenSoup.Redirect
 		public static readonly Dictionary<string, string> Urls = new Dictionary<string, string>();
 		private static new TextWriter Writer;
 
-		public Redirect()
+		protected override void Init()
 		{
 			if(File.Exists(urlFilePath))
 			{

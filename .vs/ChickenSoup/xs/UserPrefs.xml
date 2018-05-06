@@ -1,11 +1,12 @@
 ﻿<Properties StartupConfiguration="{FAAF862E-6129-48EF-BDDB-6CB93A72045C}|Default" GitUserInfo="UsingMD">
   <MonoDevelop.Ide.ItemProperties.ChickenSoup PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.ItemProperties.Conversion FirstBuild="True" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Plugins/Articles/Article.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Plugins/Articles/Articles.Client.cs">
     <Files>
-      <File FileName="Plugins/Articles/Articles.cs" Line="66" Column="19" />
-      <File FileName="ChickenSoup.cs" Line="47" Column="24" />
-      <File FileName="Plugins/Articles/Article.cs" Line="47" Column="48" />
+      <File FileName="Plugins/Articles/Article.cs" Line="64" Column="1" />
+      <File FileName="Plugins/Articles/Articles.cs" Line="40" Column="10" />
+      <File FileName="config.txt" Line="27" Column="1" />
+      <File FileName="Plugins/Articles/Articles.Client.cs" Line="81" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.ItemProperties.Configuration FirstBuild="True" />
@@ -13,7 +14,7 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/Luc/Projects/C#/ChickenSoup/Articles/Articles.Comments.cs" relfile="Articles/Articles.Comments.cs" line="51" column="1" />
-      <Breakpoint file="/Users/Luc/Projects/C#/ChickenSoup/Plugins/Articles/Article.cs" relfile="Plugins/Articles/Article.cs" line="47" column="48" />
+      <Breakpoint file="/Users/Luc/Projects/C#/ChickenSoup/Plugins/Articles/Articles.Comments.cs" relfile="Plugins/Articles/Articles.Comments.cs" line="82" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

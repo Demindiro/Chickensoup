@@ -24,6 +24,3 @@ COMMENT_MIN_COMMENT_LENGTH = 5
 
 # Redirect related stuff
 REDIRECT_URLS_FILE = ../../redirects.json
-
-# Plugins
-PLUGINS_FOLDER = ../../Plugins/bin

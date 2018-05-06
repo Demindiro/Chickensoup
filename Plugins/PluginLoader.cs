@@ -9,7 +9,12 @@ namespace ChickenSoup.Plugins
 {
 	internal static class PluginLoader
 	{
-		[Config("PLUGINS_FOLDER")] private static readonly string PluginsFolder;
+		private static readonly string PluginsFolder = 
+		 #if DEBUG
+		 "../../Plugins/bin";
+		 #else
+		 "plugins";
+		 #endif
 
 		internal static void LoadPlugins()
 		{
@@ -29,12 +34,21 @@ namespace ChickenSoup.Plugins
 					list.Add(plugin);
 				}
 			}
-			Configuration.Config.ReadConfigFile(false);
 			for (int i = 0; i < list.Count; i++)
 			{
 				var constructor = list[i].GetType().GetConstructor(new Type[0]);
+					/*
+					list[i].GetType().GetConstructor(
+					BindingFlags.Public | BindingFlags.NonPublic,
+					null,
+					new Type[0],
+					null
+				);*/
 				constructor.Invoke(list[i], new object[0]);
 			}
+			Configuration.Config.ReadConfigFile(false);
+			for (int i = 0; i < list.Count; i++)
+				list[i].Init();
 		}
 	}
 }
