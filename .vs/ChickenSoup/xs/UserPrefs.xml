@@ -1,10 +1,10 @@
 ﻿<Properties StartupConfiguration="{FAAF862E-6129-48EF-BDDB-6CB93A72045C}|Default" GitUserInfo="UsingMD">
   <MonoDevelop.Ide.ItemProperties.ChickenSoup PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.ItemProperties.Conversion FirstBuild="True" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="config.txt">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Plugins/Articles/Articles.Client.cs">
     <Files>
-      <File FileName="Plugins/Articles/Article.cs" Line="64" Column="1" />
-      <File FileName="config.txt" Line="27" Column="1" />
+      <File FileName="Plugins/Articles/Articles.cs" Line="16" Column="3" />
+      <File FileName="Plugins/Articles/Articles.Client.cs" Line="78" Column="14" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.ItemProperties.Configuration FirstBuild="True" />

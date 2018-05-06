@@ -18,17 +18,20 @@ namespace ChickenSoup.Articles
 			public List<CommentTree> branches = new List<CommentTree>();
 
 			public CommentTree()
-			{ }
+			{
+				this.id = -1;
+			}
 			public CommentTree(Comment comment)
 			{
 				this.comment = comment;
+				this.id = comment.id;
 			}
 
 			public bool Add(Comment comment)
 			{
 				if (comment.replyTo == id)
 				{
-					Add(new CommentTree(comment));
+					branches.Add(new CommentTree(comment));
 					return true;
 				}
 				int count = branches.Count;
@@ -39,7 +42,6 @@ namespace ChickenSoup.Articles
 				}
 				return false;
 			}
-			public void Add(CommentTree tree) => branches.Add(tree);
 		}
 
 		#pragma warning disable 0649
@@ -75,7 +77,6 @@ namespace ChickenSoup.Articles
 				var content = File.ReadAllText(path);
 				var comments = article.GetComments();
 				var tree = new CommentTree();
-				tree.id = -1;
 				foreach (var comment in comments)
 					if (!tree.Add(comment))
 						throw new FormatException($"Comment file of {article.Name} has an invalid comment: {comment}");

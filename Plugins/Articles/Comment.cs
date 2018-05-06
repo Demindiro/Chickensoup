@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using static System.Text.Encoding;
+using Markdig;
 
-namespace ChickenSoup
+namespace ChickenSoup.Articles
 {
 	public struct Comment
 	{

@@ -28,13 +28,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="Markdig">
+      <HintPath>..\..\packages\Markdig.0.15.0\lib\net40\Markdig.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Articles.cs" />
     <Compile Include="Article.cs" />
     <Compile Include="Articles.Client.cs" />
-    <Compile Include="Articles.Comment.cs" />
+    <Compile Include="Comment.cs" />
     <Compile Include="Articles.Comments.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +48,9 @@
       <Project>{FAAF862E-6129-48EF-BDDB-6CB93A72045C}</Project>
       <Name>ChickenSoup</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
