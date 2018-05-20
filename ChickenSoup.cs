@@ -52,7 +52,7 @@ namespace ChickenSoup
 			}
 
 			Command.RegisterCommands();
-			Command.AddCommand("config reload", () => Config.ReadConfigFile(false));
+			Command.AddCommand("config reload", ReloadConfig);
 
 			Http.AddListener("", HandleRequest);
 
@@ -69,6 +69,9 @@ namespace ChickenSoup
 				}
 			}
 		}
+
+		// All lambdas and anonymous methods are now instance-bound so fuck me
+		static void ReloadConfig() => Config.ReadConfigFile(false);
 
 
 		private static int ParseArguments(string[] args)
@@ -91,10 +94,8 @@ namespace ChickenSoup
 			return ret;
 		}
 
-		private static bool HandleRequest(HttpListenerContext context)
+		private static void HandleRequest(HttpListenerContext context, HttpListener server)
 		{
-			ThreadPool.QueueUserWorkItem(delegate
-			{
 				try
 				{
 					GetFile(context);
@@ -104,8 +105,6 @@ namespace ChickenSoup
 					Logger.Log(ex);
 					context.Error(HttpStatusCode.InternalServerError);
 				}
-			});
-			return true;
 		}
 
 		public static string WrapContent(this string content) => baseTemplate.Process(content);

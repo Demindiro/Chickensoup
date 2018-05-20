@@ -39,27 +39,23 @@ namespace ChickenSoup.Redirect
 			Http.AddListener("rdr", RedirectClient);
 		}
 
-		private static bool RedirectClient(HttpListenerContext context)
+		private static void RedirectClient(HttpListenerContext context, HttpListener server)
 		{
-			ThreadPool.QueueUserWorkItem(delegate
+			var url = context.Request.Url.Segments;
+			if (url.Length < 3)
 			{
-				var url = context.Request.Url.Segments;
-				if (url.Length < 3)
-				{
-					context.Error(HttpStatusCode.BadRequest);
-					return;
-				}
-				var key = context.Request.Url.Segments[2];
-				if(!Urls.ContainsKey(key))
-				{
-					context.Error(HttpStatusCode.BadRequest);
-					return;
-				}
-				context.SetHeader("Location", Urls[key]);
-				context.Response.StatusCode = (int)HttpStatusCode.Found;
-				context.Response.Close();
-			});
-			return true;
+				context.Error(HttpStatusCode.BadRequest);
+				return;
+			}
+			var key = context.Request.Url.Segments[2];
+			if (!Urls.ContainsKey(key))
+			{
+				context.Error(HttpStatusCode.BadRequest);
+				return;
+			}
+			context.Response.Headers["Location"] = Urls[key];
+			context.Response.StatusCode = (int)HttpStatusCode.Found;
+			context.Response.Close();
 		}
 
 

@@ -66,7 +66,7 @@ namespace ChickenSoup.Articles
 			for (int i = 0; i < categories.Length; i++)
 			{
 				var index = i;
-				Http.AddListener(categories[i], (context) => HandleArticleRequest(context, index));
+				Http.AddListener(categories[i], (context, server) => HandleArticleRequest(context, index));
 			}
 			ro_lastArticles = Array.AsReadOnly<Article>(lastArticles);
 		}

@@ -8,16 +8,16 @@ namespace ChickenSoup
 	using Configuration;
 	public static class Http
 	{
-		public delegate bool Callback(HttpListenerContext context);
+		public delegate void Callback(HttpListenerContext context, HttpListener server);
 
 		[Config("CACHE_MAX_AGE")]             public static readonly int CacheMaxAge;
 		[Config("PORT")]                      public static readonly ushort Port;
 		[Config("TLS_PORT", Optional = true)] public static readonly ushort TlsPort;
 
-		public static void Close(this HttpListenerContext client, HttpStatusCode code)
+		public static void Close(this HttpListenerContext context, HttpStatusCode code)
 		{
-			client.Response.StatusCode = (int)code;
-			client.Response.Close();
+			context.Response.StatusCode = (int)code;
+			context.Response.Close();
 		}
 
 		public static void Error(this HttpListenerContext client, HttpStatusCode code)
@@ -29,7 +29,7 @@ namespace ChickenSoup
 			try
 			{
 				client.Response.StatusCode = (int)code;
-				client.SetHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+				client.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
 				error = error.Insert(i + "<error>".Length, $"Error {(int)code}: {client.Response.StatusDescription}");
 				error = error.WrapContent();
 				client.WriteAndClose(Encoding.UTF8.GetBytes(error), "html", code);
@@ -39,13 +39,6 @@ namespace ChickenSoup
 				Logger.Log(ex);
 				client.Response.OutputStream.Close();
 			}
-		}
-
-
-		public static void SetHeader(this HttpListenerContext client, string header, object value) => client.SetHeader(header, value.ToString());
-		public static void SetHeader(this HttpListenerContext client, string header, string value)
-		{
-			client.Response.Headers[header] = value;
 		}
 
 
@@ -66,7 +59,7 @@ namespace ChickenSoup
 		}
 		public static void Write(this HttpListenerContext client, byte[] data, string fileExt)
 		{
-			client.SetHeader("Cache-Control", "public, max-age=" + CacheMaxAge);
+			client.Response.Headers["Cache-Control"] = "public, max-age=" + CacheMaxAge;
 			client.Response.ContentType = MimeType.GetMimeType(fileExt);
 			client.Write(data);
 		}
@@ -105,11 +98,12 @@ namespace ChickenSoup
 			{
 				if (ExtractAsyncResult(ar, out var server, out var context, out var callback))
 				{
-					context.SetHeader("Server", "ChickenSoup/" + Configuration.Config.Version);
-					if (callback(context))
+					context.Response.Headers["Server"] = "ChickenSoup/" + Configuration.Config.Version;
+					ThreadPool.QueueUserWorkItem((state) => callback(context, server));
+					if (server.IsListening)
 						server.BeginGetContext(HandleNewContext, ar.AsyncState);
 					else
-						server.Close();
+						server.Close(); // Make sure the listener has actually been disposed.
 				}
 				else
 				{
