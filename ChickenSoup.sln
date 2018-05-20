@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redirect", "Plugins\Redirec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Articles", "Plugins\Articles\Articles.csproj", "{D884F201-BEB8-442E-AC67-4505203B4CAA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Statistics", "Plugins\Statistics\Statistics.csproj", "{98779DF9-F506-4E30-8093-9E279177B36F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -33,6 +35,10 @@ Global
 		{D884F201-BEB8-442E-AC67-4505203B4CAA}.Debug|x86.Build.0 = Debug|Any CPU
 		{D884F201-BEB8-442E-AC67-4505203B4CAA}.Release|x86.ActiveCfg = Release|Any CPU
 		{D884F201-BEB8-442E-AC67-4505203B4CAA}.Release|x86.Build.0 = Release|Any CPU
+		{98779DF9-F506-4E30-8093-9E279177B36F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{98779DF9-F506-4E30-8093-9E279177B36F}.Debug|x86.Build.0 = Debug|Any CPU
+		{98779DF9-F506-4E30-8093-9E279177B36F}.Release|x86.ActiveCfg = Release|Any CPU
+		{98779DF9-F506-4E30-8093-9E279177B36F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
@@ -53,5 +59,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C4F99860-71EA-430A-AA22-26CEBFF9077A} = {B68EB2B4-46E4-4742-A2D9-75C23945F1B3}
 		{D884F201-BEB8-442E-AC67-4505203B4CAA} = {B68EB2B4-46E4-4742-A2D9-75C23945F1B3}
+		{98779DF9-F506-4E30-8093-9E279177B36F} = {B68EB2B4-46E4-4742-A2D9-75C23945F1B3}
 	EndGlobalSection
 EndGlobal
