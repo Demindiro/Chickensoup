@@ -62,7 +62,7 @@ namespace ChickenSoup.Articles
 			else
 			{
 				// This should prevent accidently submitting a form multiple times
-				client.SetHeader("Location", client.Request.Url);
+				client.Response.Headers["Location"] = client.Request.Url.ToString();
 				client.Close(HttpStatusCode.SeeOther);
 			}
 		}
