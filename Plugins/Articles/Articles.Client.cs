@@ -103,7 +103,7 @@ namespace ChickenSoup.Articles
 				replaceLinks(article.Previous, "{previous}", "{previous??(");
 				response = response.Replace("{content}", File.ReadAllText(path))
 				                   .Replace("{comments}", GenerateCommentHtml(tree));
-				client.WriteAndClose(response, "html", HttpStatusCode.OK);
+				client.Write(response, "html", HttpStatusCode.OK);
 			}
 			else
 			{
@@ -125,7 +125,7 @@ namespace ChickenSoup.Articles
 				art = art.Previous;
 			}
 
-			client.WriteAndClose(sb.ToString(), "html", HttpStatusCode.OK);
+			client.Write(sb.ToString(), "html", HttpStatusCode.OK);
 		}
 
 

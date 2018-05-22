@@ -130,7 +130,7 @@ namespace ChickenSoup
 				path = RootFolder + "/" + ((path == "/") ? "index.html" : path + ".html");
 				if (client.ErrorOnNonExists(path))
 					return;
-				client.WriteAndClose(File.ReadAllText(path), format, HttpStatusCode.OK);
+				client.Write(File.ReadAllText(path), format, HttpStatusCode.OK);
 			}
 			else
 			{
@@ -138,7 +138,7 @@ namespace ChickenSoup
 				path = RootFolder + path;
 				if (client.ErrorOnNonExists(path))
 					return;
-				client.WriteAndClose(File.ReadAllBytes(path), format, HttpStatusCode.OK);
+				client.Write(File.ReadAllBytes(path), format, HttpStatusCode.OK);
 			}
 		}
 

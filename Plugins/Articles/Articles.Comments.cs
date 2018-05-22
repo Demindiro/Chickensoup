@@ -57,7 +57,7 @@ namespace ChickenSoup.Articles
 
 			if (client.Request.Url.Query.Contains("returnSelf"))
 			{
-				client.WriteAndClose(GenerateCommentHtml(comment, ""), "html", HttpStatusCode.Created);
+				client.Write(GenerateCommentHtml(comment, ""), "html", HttpStatusCode.Created);
 			}
 			else
 			{
@@ -81,7 +81,7 @@ namespace ChickenSoup.Articles
 		{
 			var name = client.Request.Url.Segments[1];
 			var path = articleRootFolder + categories[categoryIndex] + name + "-comments";
-			client.WriteAndClose(File.ReadAllBytes(path), "json", HttpStatusCode.OK);
+			client.Write(File.ReadAllBytes(path), "json", HttpStatusCode.OK);
 		}
 	}
 }
