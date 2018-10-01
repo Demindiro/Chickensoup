@@ -71,7 +71,7 @@ namespace ChickenSoup
 		}
 
 		// All lambdas and anonymous methods are now instance-bound so fuck me
-		static void ReloadConfig() => Config.ReadConfigFile(false);
+		static void ReloadConfig() => Config.ReadConfigFile(allowUnassignedFields:false);
 
 
 		private static int ParseArguments(string[] args)

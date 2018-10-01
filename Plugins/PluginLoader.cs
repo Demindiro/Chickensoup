@@ -51,7 +51,7 @@ namespace ChickenSoup.Plugins
 				);*/
 				constructor.Invoke(plugs[i], new object[0]);
 			}
-			Configuration.Config.ReadConfigFile(false);
+			Config.ReadConfigFile(allowUnassignedFields:false);
 			for (int i = 0; i < plugs.Count; i++)
 			{
 				Console.WriteLine("Initializing " + attrs[i].Name);
