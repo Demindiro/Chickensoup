@@ -17,3 +17,6 @@ me credit by linking this repository.
 PS: I may have broken the build with the last few commits (I honestly can't remember)
     but previous versions should still work. I'll try to figure out which ones still
     work and tag them when I have spare time I don't know how to use elsewhere.
+
+PS2: You will need [my libraries](https://github.com/Demindiro/cs-Libraries) if you
+     want to build this project.
