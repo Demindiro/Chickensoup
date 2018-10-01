@@ -1,4 +1,4 @@
-What is chickensoup?
+What is Chickensoup?
 ====================
 
 Chickensoup was orginally a simple HTTP server which focused on minimizing bandwitdh
